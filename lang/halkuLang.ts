@@ -20,7 +20,7 @@ import type { RunResult, OutputLine, OutputType } from '@/lib/outputTypes';
 // ─── Detection keywords ───────────────────────────────────────────────────────
 
 const DETECT_KEYWORDS = [
-  'hi halku', 'bye halku', 'maan le', 'sun re', 'bhai agar', 'nahi toh',
+  'halku re', 'bye halku', 'maan le', 'sun re', 'bhai agar', 'nahi toh',
   'jab tak re', 'iske liye', 'badha re', 'ghata re',
   'de re', 'bas kar re', 'agla dekh re',
 ];
@@ -63,19 +63,19 @@ export function runHalkuLang(
   };
 
   try {
-    // Extract block between `hi halku` and `bye halku`
-    const startIndex = code.indexOf('hi halku');
+    // Extract block between `halku re` and `bye halku`
+    const startIndex = code.indexOf('halku re');
     const endIndex = code.indexOf('bye halku', startIndex + 1);
 
     let activeCode = code;
     if (startIndex !== -1 && endIndex !== -1) {
-      activeCode = code.substring(startIndex + 'hi halku'.length, endIndex);
+      activeCode = code.substring(startIndex + 'halku re'.length, endIndex);
     } else if (startIndex !== -1) {
       // Missing bye halku
       throw new LexError("Expected 'bye halku' to end the program", 1, 1);
     } else if (endIndex !== -1) {
-      // Missing hi halku
-      throw new LexError("Expected 'hi halku' to start the program", 1, 1);
+      // Missing halku re
+      throw new LexError("Expected 'halku re' to start the program", 1, 1);
     } else {
       // Neither found — technically an empty program if not throwing, but we'll let tokenizer parse empty string
       activeCode = '';
@@ -110,7 +110,7 @@ export function runHalkuLang(
 
 export const HALKULANG_DEFAULT = `// HalkuLang — Hindi-English hybrid scripting
 
-hi halku
+halku re
   maan le naam = "Duniya";
   sun re "Namaste, " + naam + "!";
 

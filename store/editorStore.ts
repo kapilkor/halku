@@ -7,54 +7,39 @@ import { isHalkuLang, runHalkuLang } from "@/lang/halkuLang";
 
 export type DetectedLanguage = 'halku' | 'halkuLang';
 
-const DEFAULT_CODE = `// HalkuLang — Hindi-English hybrid scripting
+const DEFAULT_MODE_CODE = `halku re
+maan le a = 10
 
-hi halku
-  maan le naam = "Duniya";
-  sun re "Namaste, " + naam + "!";
+jab tak re (a < 5) {
+sun re(a)
+a++
+}
+bye halku`;
 
-  // Types
-  maan le sach_hai = sach;
-  maan le nalla_hai = nalla;
-  sun re sach_hai;
-  sun re nalla_hai;
+const CUSTOM_MODE_CODE = `halku re
+maan le a = 10
 
-  // Loops (jab tak re = while)
-  maan le ginti = 0;
-  jab tak re (ginti < 3) {
-    sun re "Loop ginti = " + ginti;
-    badha re ginti;
-  }
-
-  // Conditions
-  maan le a = 10;
-  bhai agar (a < 5) {
-    sun re "a is small";
-  } nahi toh agar (a < 15) {
-    sun re "a is medium";
-  } nahi toh {
-    sun re "a is large";
-  }
-
-  // function
-  function factorial(n) {
-    bhai agar (n <= 1) {
-      de re 1;
-    }
-    de re n * factorial(n - 1);
-  }
-
-  sun re "5! = " + factorial(5);
-
-bye halku
-`;
+jab tak re (a < 5) {
+sun re(a)
+a++
+}
+bye halku`;
 
 export interface EditorStore {
   // ── Editor state ──
+  mode:             "default" | "custom";
+  setMode:          (mode: "default" | "custom") => void;
   code:             string;
   detectedLanguage: DetectedLanguage;
   setCode:          (code: string) => void;
   resetCode:        () => void;
+
+  // ── Mappings ──
+  customMapping: Record<string, string>;
+  setCustomMapping: (mapping: Record<string, string>) => void;
+  updateMapping: (userWord: string, halkuWord: string) => void;
+  removeMapping: (userWord: string) => void;
+  clearMapping: () => void;
 
   // ── Execution state ──
   output:        OutputLine[];
@@ -71,7 +56,16 @@ export const useEditorStore = create<EditorStore>()(
   devtools(
     (set, get) => ({
       // ── Editor ──
-      code:             DEFAULT_CODE,
+      mode:             "default",
+      setMode:          (mode) => 
+        set({ 
+          mode, 
+          code: mode === "default" ? DEFAULT_MODE_CODE : CUSTOM_MODE_CODE,
+          output: [],
+          hasError: false,
+          lastRunResult: null
+        }, false, "setMode"),
+      code:             DEFAULT_MODE_CODE,
       detectedLanguage: 'halkuLang' as DetectedLanguage,
       setCode: (code) =>
         set(
@@ -81,10 +75,48 @@ export const useEditorStore = create<EditorStore>()(
         ),
       resetCode: () =>
         set(
-          { code: DEFAULT_CODE, detectedLanguage: 'halkuLang', output: [], hasError: false, lastRunResult: null },
+          (state) => ({ code: state.mode === "default" ? DEFAULT_MODE_CODE : CUSTOM_MODE_CODE, detectedLanguage: 'halkuLang', output: [], hasError: false, lastRunResult: null }),
           false,
           'resetCode'
         ),
+
+      // ── Mappings ──
+      customMapping: {},
+      setCustomMapping: (mapping) => {
+        set({ customMapping: mapping }, false, 'setCustomMapping');
+        console.log("Custom Mapping Updated:", mapping);
+      },
+      updateMapping: (userWord, halkuWord) => {
+        const u = userWord.trim();
+        const h = halkuWord.trim();
+        if (!u || !h) return;
+        set(
+          (state) => {
+            const next = { ...state.customMapping, [u]: h };
+            console.log("Custom Mapping Updated:", next);
+            return { customMapping: next };
+          },
+          false,
+          'updateMapping'
+        );
+      },
+      removeMapping: (userWord) => {
+        set(
+          (state) => {
+            const u = userWord.trim();
+            const next = { ...state.customMapping };
+            delete next[u];
+            console.log("Custom Mapping Updated:", next);
+            return { customMapping: next };
+          },
+          false,
+          'removeMapping'
+        );
+      },
+      clearMapping: () => {
+        set({ customMapping: {} }, false, 'clearMapping');
+        console.log("Custom Mapping Updated:", {});
+      },
 
       // ── Execution ──
       output: [],

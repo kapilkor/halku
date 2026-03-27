@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import SoundToggle from "@/components/ui/SoundToggle";
+import { useEditorStore } from "@/store/editorStore";
 
 interface ToolbarProps {
   onRun:     () => void;
@@ -80,6 +81,9 @@ export default function Toolbar({
   onShowDocs,
   isRunning,
 }: ToolbarProps) {
+  const mode = useEditorStore((s) => s.mode);
+  const setMode = useEditorStore((s) => s.setMode);
+
   return (
     <motion.header
       id="halku-toolbar"
@@ -138,6 +142,44 @@ export default function Toolbar({
         >
           playground
         </span>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
+        {/* Toggle Mode Segmented Control */}
+        <div style={{ display: "flex", background: "var(--bg-primary)", padding: "2px", borderRadius: "16px", border: "1px solid var(--border-subtle)" }}>
+          <button
+            onClick={() => setMode("default")}
+            style={{
+              padding: "4px 12px",
+              borderRadius: "14px",
+              border: "none",
+              fontSize: "12px",
+              fontWeight: mode === "default" ? 600 : 400,
+              color: mode === "default" ? "#fff" : "var(--text-secondary)",
+              background: mode === "default" ? "var(--accent)" : "transparent",
+              cursor: "pointer",
+              transition: "all 0.2s"
+            }}
+          >
+            Default
+          </button>
+          <button
+            onClick={() => setMode("custom")}
+            style={{
+              padding: "4px 12px",
+              borderRadius: "14px",
+              border: "none",
+              fontSize: "12px",
+              fontWeight: mode === "custom" ? 600 : 400,
+              color: mode === "custom" ? "#fff" : "var(--text-secondary)",
+              background: mode === "custom" ? "var(--accent)" : "transparent",
+              cursor: "pointer",
+              transition: "all 0.2s"
+            }}
+          >
+            Custom
+          </button>
+        </div>
       </div>
 
       {/* ── Actions ── */}

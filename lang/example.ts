@@ -37,7 +37,7 @@ bye halku
 // ─── Example 2: Full feature showcase ────────────────────────────────────────
 
 const FULL_EXAMPLE = `
-hi halku
+halku re
   // Variables
   maan le naam = "Duniya";
   sun re "Namaste, " + naam + "!";
