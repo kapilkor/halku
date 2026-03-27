@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 import { halkuCompile } from "@/lib/halkuCompiler";
 import { halkuRun } from "@/lib/halkuRunner";
 import { OutputLine, RunResult } from "@/lib/outputTypes";
@@ -30,6 +30,8 @@ export interface EditorStore {
   mode:             "default" | "custom";
   setMode:          (mode: "default" | "custom") => void;
   code:             string;
+  defaultCode:      string;
+  customCode:       string;
   detectedLanguage: DetectedLanguage;
   setCode:          (code: string) => void;
   resetCode:        () => void;
@@ -54,33 +56,52 @@ export interface EditorStore {
 
 export const useEditorStore = create<EditorStore>()(
   devtools(
-    (set, get) => ({
-      // ── Editor ──
-      mode:             "default",
-      setMode:          (mode) => 
-        set({ 
-          mode, 
-          code: mode === "default" ? DEFAULT_MODE_CODE : CUSTOM_MODE_CODE,
-          output: [],
-          hasError: false,
-          lastRunResult: null
-        }, false, "setMode"),
-      code:             DEFAULT_MODE_CODE,
-      detectedLanguage: 'halkuLang' as DetectedLanguage,
-      setCode: (code) =>
-        set(
-          { code, detectedLanguage: isHalkuLang(code) ? 'halkuLang' : 'halku' },
-          false,
-          'setCode'
-        ),
-      resetCode: () =>
-        set(
-          (state) => ({ code: state.mode === "default" ? DEFAULT_MODE_CODE : CUSTOM_MODE_CODE, detectedLanguage: 'halkuLang', output: [], hasError: false, lastRunResult: null }),
-          false,
-          'resetCode'
-        ),
+    persist(
+      (set, get) => ({
+        // ── Editor ──
+        mode:             "default",
+        defaultCode:      DEFAULT_MODE_CODE,
+        customCode:       CUSTOM_MODE_CODE,
+        setMode:          (mode) => 
+          set((state) => ({ 
+            mode, 
+            code: mode === "default" ? state.defaultCode : state.customCode,
+            output: [],
+            hasError: false,
+            lastRunResult: null
+          }), false, "setMode"),
+        code:             DEFAULT_MODE_CODE,
+        detectedLanguage: 'halkuLang' as DetectedLanguage,
+        setCode: (code) =>
+          set(
+            (state) => ({ 
+              code, 
+              defaultCode: state.mode === 'default' ? code : state.defaultCode,
+              customCode: state.mode === 'custom' ? code : state.customCode,
+              detectedLanguage: isHalkuLang(code) ? 'halkuLang' : 'halku' 
+            }),
+            false,
+            'setCode'
+          ),
+        resetCode: () =>
+          set(
+            (state) => {
+              const isDefault = state.mode === "default";
+              return { 
+                code: isDefault ? DEFAULT_MODE_CODE : CUSTOM_MODE_CODE, 
+                defaultCode: isDefault ? DEFAULT_MODE_CODE : state.defaultCode,
+                customCode: isDefault ? state.customCode : CUSTOM_MODE_CODE,
+                detectedLanguage: 'halkuLang', 
+                output: [], 
+                hasError: false, 
+                lastRunResult: null 
+              };
+            },
+            false,
+            'resetCode'
+          ),
 
-      // ── Mappings ──
+        // ── Mappings ──
       customMapping: {},
       setCustomMapping: (mapping) => {
         set({ customMapping: mapping }, false, 'setCustomMapping');
@@ -156,13 +177,24 @@ export const useEditorStore = create<EditorStore>()(
         set({ isRunning: false, hasError: result.hasError, lastRunResult: result }, false, 'runComplete');
       },
 
-      clearOutput: () =>
-        set(
-          { output: [], hasError: false, lastRunResult: null },
-          false,
-          "clearOutput"
-        ),
-    }),
+        clearOutput: () =>
+          set(
+            { output: [], hasError: false, lastRunResult: null },
+            false,
+            "clearOutput"
+          ),
+      }),
+      { 
+        name: "halku-editor-storage",
+        partialize: (state) => ({
+          mode: state.mode,
+          code: state.code,
+          defaultCode: state.defaultCode,
+          customCode: state.customCode,
+          // customMapping is EXCLUDED from persistence (session-only based on requirements)
+        })
+      }
+    ),
     { name: "EditorStore" }
   )
 );
