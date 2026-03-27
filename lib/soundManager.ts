@@ -44,13 +44,14 @@ const SOUNDS: Record<SoundKey, () => void> = {
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
-let _enabled = false;
+let _enabled = true;
 
 /** Call once on app boot — reads persisted preference and loads sounds */
 export function initSound(): void {
   if (typeof window === "undefined") return;
 
-  _enabled = localStorage.getItem("halku-sound") === "1";
+  const stored = localStorage.getItem("halku-sound");
+  _enabled = stored !== "0"; // Default to true unless explicitly set to "0"
   Howler.mute(!_enabled);
 
   // Pre-load typing sounds into a pool

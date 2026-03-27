@@ -8,7 +8,7 @@ interface SoundToggleProps {
 }
 
 export default function SoundToggle({ className }: SoundToggleProps) {
-  const [on, setOn] = useState(false);
+  const [on, setOn] = useState(true);
 
   // Hydrate from localStorage on mount
   useEffect(() => {

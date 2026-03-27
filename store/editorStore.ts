@@ -7,46 +7,46 @@ import { isHalkuLang, runHalkuLang } from "@/lang/halkuLang";
 
 export type DetectedLanguage = 'halku' | 'halkuLang';
 
-const DEFAULT_CODE = `// Welcome to Halku 💪
-// Halku keywords work alongside plain JavaScript.
-// print  warn  err  info  fn  let!  loop  each  when  otherwise  ret  wait  task
-
-fn greet(name) {
-  ret \`Hello, \${name}!\`;
-}
-
-print(greet("World"));
-
-let! numbers = [1, 2, 3, 4, 5];
-let! doubled = numbers.map(n => n * 2);
-print("Doubled:", doubled);
-
-when (doubled.length > 0) {
-  print("✅ All done in Halku!");
-} otherwise {
-  warn("No numbers found.");
-}
-
-// Try: while(true){} → will time out safely after 5s
-
-/*
-// ==========================================
-// Or try the new HalkuLang:
-// Just uncomment the block below and click run!
-// ==========================================
+const DEFAULT_CODE = `// HalkuLang — Hindi-English hybrid scripting
 
 hi halku
   maan le naam = "Duniya";
   sun re "Namaste, " + naam + "!";
 
+  // Types
+  maan le sach_hai = sach;
   maan le nalla_hai = nalla;
+  sun re sach_hai;
   sun re nalla_hai;
 
-  iske liye (maan le i = 0; i < 3; badha re i) {
-    sun re "i = " + i;
+  // Loops (jab tak re = while)
+  maan le ginti = 0;
+  jab tak re (ginti < 3) {
+    sun re "Loop ginti = " + ginti;
+    badha re ginti;
   }
+
+  // Conditions
+  maan le a = 10;
+  bhai agar (a < 5) {
+    sun re "a is small";
+  } nahi toh agar (a < 15) {
+    sun re "a is medium";
+  } nahi toh {
+    sun re "a is large";
+  }
+
+  // function
+  function factorial(n) {
+    bhai agar (n <= 1) {
+      de re 1;
+    }
+    de re n * factorial(n - 1);
+  }
+
+  sun re "5! = " + factorial(5);
+
 bye halku
-*/
 `;
 
 export interface EditorStore {
@@ -72,7 +72,7 @@ export const useEditorStore = create<EditorStore>()(
     (set, get) => ({
       // ── Editor ──
       code:             DEFAULT_CODE,
-      detectedLanguage: 'halku' as DetectedLanguage,
+      detectedLanguage: 'halkuLang' as DetectedLanguage,
       setCode: (code) =>
         set(
           { code, detectedLanguage: isHalkuLang(code) ? 'halkuLang' : 'halku' },
@@ -81,7 +81,7 @@ export const useEditorStore = create<EditorStore>()(
         ),
       resetCode: () =>
         set(
-          { code: DEFAULT_CODE, detectedLanguage: 'halku', output: [], hasError: false, lastRunResult: null },
+          { code: DEFAULT_CODE, detectedLanguage: 'halkuLang', output: [], hasError: false, lastRunResult: null },
           false,
           'resetCode'
         ),
