@@ -1,26 +1,151 @@
 @import "tailwindcss";
 
+/* ─── Design tokens ─── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-primary: #0d0d14;
+  --bg-secondary: #13131f;
+  --bg-panel: #181825;
+  --bg-elevated: #1e1e2e;
+  --border-subtle: rgba(139, 92, 246, 0.12);
+  --border-strong: rgba(139, 92, 246, 0.3);
+
+  --accent: #7c3aed;
+  --accent-light: #a78bfa;
+  --accent-glow: rgba(124, 58, 237, 0.25);
+
+  /* Hulk green — run button, mascot glow, active lines */
+  --hulk-green: #22c55e;
+  --hulk-green-dark: #15803d;
+  --hulk-glow: rgba(34, 197, 94, 0.35);
+
+  --green: #22d3a5;
+  --red: #f87171;
+  --yellow: #fbbf24;
+  --blue: #60a5fa;
+
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #4a5568;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-glow: 0 0 24px rgba(124, 58, 237, 0.2);
+  --shadow-panel: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
+/* Dark mode is the default — light tokens override if ever needed */
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-panel: #ffffff;
+  --bg-elevated: #ffffff;
+  --border-subtle: rgba(139, 92, 246, 0.15);
+  --border-strong: rgba(139, 92, 246, 0.4);
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+}
+
+/* ─── Tailwind v4 theme surface ─── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Reset & base ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden; /* playground is full viewport */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(34, 197, 94, 0.35);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 197, 94, 0.6);
+}
+
+/* ─── Utility classes ─── */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.glass {
+  background: rgba(30, 30, 46, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+}
+
+.glow-accent {
+  box-shadow: var(--shadow-glow);
+}
+
+
+
+
+/* ─── CodeMirror host reset ─── */
+.cm-editor {
+  height: 100%;
+  font-family: var(--font-mono) !important;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.cm-scroller {
+  overflow: auto;
+}
+
+/* ─── Hulk pulse animation (power-up on mascot success) ─── */
+@keyframes hulk-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); }
+  70%  { box-shadow: 0 0 0 16px rgba(34,197,94,0); }
+  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
+
+.hulk-pulse {
+  animation: hulk-pulse 0.6s ease-out;
+}
+
+/* ─── Focus ring — update to green ─── */
+:focus-visible {
+  outline: 2px solid var(--hulk-green);
+  outline-offset: 2px;
 }
