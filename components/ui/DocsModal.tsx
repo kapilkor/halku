@@ -82,10 +82,10 @@ export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
               </p>
               
               <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>General</h3>
-              <p>Every HalkuLang program starts with <strong>hi halku</strong> and must end with <strong>bye halku</strong>. Anything outside of this block will be ignored.</p>
+              <p>Every HalkuLang program starts with <strong>halku re</strong> and must end with <strong>bye halku</strong>. Anything outside of this block will be ignored.</p>
               <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`This will be ignored
 
-hi halku
+halku re
   // Write your code here
 bye halku
 
@@ -93,7 +93,7 @@ This too will be ignored`}</pre>
 
               <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Variables</h3>
               <p>Variables are declared using <strong>maan le</strong>.</p>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`hi halku
+              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
   maan le a = 10;
   maan le b = "hello";
   maan le c = 5;
@@ -114,7 +114,7 @@ bye halku`}</pre>
                 <li><code>jhoot</code> → false</li>
                 <li><code>nalla</code> → null</li>
               </ul>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`hi halku
+              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
   maan le a = 10;
   maan le b = 20 + (5 * 2);
   maan le c = "text";
@@ -128,7 +128,7 @@ bye halku`}</pre>
 
               <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Output</h3>
               <p>Use <strong>sun re</strong> to print values to the console.</p>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`hi halku
+              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
   sun re "Hello World";
 
   maan le a = 10;
@@ -148,7 +148,7 @@ bye halku`}</pre>
                 <li><code>nahi toh agar</code> → else if</li>
                 <li><code>nahi toh</code> → else</li>
               </ul>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`hi halku
+              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
   maan le a = 10;
 
   bhai agar (a < 5) {
@@ -166,7 +166,7 @@ bye halku`}</pre>
                 <li><code>bas kar re</code> → break</li>
                 <li><code>agla dekh re</code> → continue</li>
               </ul>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`hi halku
+              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
   maan le i = 0;
 
   jab tak re (i < 5) {
@@ -189,7 +189,7 @@ bye halku`}</pre>
 
               <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>For Loop</h3>
               <p>Use <strong>iske liye</strong> for for-loops.</p>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`hi halku
+              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
   iske liye (maan le i = 0; i < 5; badha re i) {
     sun re i;
   }
@@ -197,7 +197,7 @@ bye halku`}</pre>
 
               <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Functions</h3>
               <p>Functions are declared using <strong>function</strong> and return values using <strong>de re</strong>.</p>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`hi halku
+              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
   function add(a, b) {
     de re a + b;
   }
@@ -211,7 +211,7 @@ bye halku`}</pre>
                 <li><code>badha re x</code> → increment</li>
                 <li><code>ghata re x</code> → decrement</li>
               </ul>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`hi halku
+              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
   maan le x = 5;
 
   badha re x;
@@ -230,7 +230,7 @@ bye halku`}</pre>
               </ul>
 
               <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Example Program</h3>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`hi halku
+              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
   sun re "Start";
 
   maan le a = 3;
