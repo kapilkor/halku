@@ -21,4 +21,7 @@ export interface RunResult {
   lines: OutputLine[];
   hasError: boolean;
   durationMs: number;
+  id?: number; // Optional run ID for tracking
+  ok?: boolean; // Optional success flag
+  elapsed?: number; // Optional elapsed time
 }

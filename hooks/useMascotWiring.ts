@@ -27,17 +27,20 @@ export function useMascotWiring() {
 
   // Subscribe to editorStore selectively
   useEffect(() => {
+    console.log('useMascotWiring: subscribing to editor store');
     const unsub = useEditorStore.subscribe((state, prev) => {
       // ── CODE_CHANGE (debounced 800ms) ──────────────────────────────────────
       if (state.code !== prev.code) {
         if (codeTimer.current) clearTimeout(codeTimer.current);
         codeTimer.current = setTimeout(() => {
+          console.log('useMascotWiring: dispatching CODE_CHANGE');
           dispatch("CODE_CHANGE");
         }, 800);
       }
 
       // ── RUN_START ──────────────────────────────────────────────────────────
       if (state.isRunning && !prev.isRunning) {
+        console.log('useMascotWiring: dispatching RUN_START');
         dispatch("RUN_START");
         prevRunning.current = true;
       }
@@ -46,14 +49,17 @@ export function useMascotWiring() {
       if (!state.isRunning && prev.isRunning) {
         prevRunning.current = false;
         if (state.hasError) {
+          console.log('useMascotWiring: dispatching RUN_ERROR');
           dispatch("RUN_ERROR");
         } else if (state.lastRunResult !== null) {
+          console.log('useMascotWiring: dispatching RUN_SUCCESS');
           dispatch("RUN_SUCCESS");
         }
       }
     });
 
     return () => {
+      console.log('useMascotWiring: unsubscribing from editor store');
       unsub();
       if (codeTimer.current) clearTimeout(codeTimer.current);
     };

@@ -30,7 +30,7 @@ const TYPING_SOUNDS = [
 
 let typingSoundPool: Howl[] = [];
 
-type SoundKey = "click" | "pop" | "success" | "fail" | "keypress";
+export type SoundKey = "click" | "pop" | "success" | "fail" | "keypress";
 
 const SOUNDS: Record<SoundKey, () => void> = {
   click: () => playGeneratedSound("click"),

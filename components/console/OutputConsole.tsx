@@ -46,6 +46,7 @@ export const ConsoleLine = memo(function ConsoleLine({
   line,
   index,
 }: ConsoleLineProps) {
+  console.log('ConsoleLine: rendering line', { line, index });
   const s = TYPE_STYLES[line.type];
   const time = new Date(line.timestamp);
   const hh = time.getHours().toString().padStart(2, "0");

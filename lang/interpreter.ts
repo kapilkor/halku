@@ -63,15 +63,19 @@ export class RuntimeError extends Error {
 export class Environment {
   private vars = new Map<string, HalkuValue>();
 
-  constructor(private readonly parent: Environment | null = null) {}
+  constructor(private readonly parent: Environment | null = null) {
+    console.log('Environment: created new environment');
+  }
 
   get(name: string, line?: number): HalkuValue {
+    console.log(`Environment: getting variable "${name}"`);
     if (this.vars.has(name)) return this.vars.get(name)!;
     if (this.parent)          return this.parent.get(name, line);
     throw new RuntimeError(`Undefined variable '${name}'`, line);
   }
 
   set(name: string, value: HalkuValue): void {
+    console.log(`Environment: setting variable "${name}" to`, value);
     // Walk up to find existing binding, else create in current scope
     if (this.vars.has(name)) { this.vars.set(name, value); return; }
     if (this.parent?.has(name)) { this.parent.set(name, value); return; }
@@ -79,11 +83,14 @@ export class Environment {
   }
 
   define(name: string, value: HalkuValue): void {
+    console.log(`Environment: defining variable "${name}" with value`, value);
     this.vars.set(name, value);
   }
 
   has(name: string): boolean {
-    return this.vars.has(name) || (this.parent?.has(name) ?? false);
+    const exists = this.vars.has(name) || (this.parent?.has(name) ?? false);
+    console.log(`Environment: checking if variable "${name}" exists:`, exists);
+    return exists;
   }
 }
 
@@ -106,17 +113,34 @@ export class Interpreter {
 
   private readonly global = new Environment();
 
-  constructor(private readonly cb: InterpreterCallbacks) {}
+  constructor(private readonly cb: InterpreterCallbacks) {
+    console.log('Interpreter: initialized');
+  }
 
   // ── Entry ─────────────────────────────────────────────────────────────────
 
   run(program: Program): void {
-    this.execBlock({ type: 'Block', body: program.body }, this.global);
+    console.log('Interpreter: starting run with program:', program);
+    try {
+      this.execBlock({ type: 'Block', body: program.body }, this.global);
+      console.log('Interpreter: run finished successfully');
+    } catch (e) {
+      console.error('Interpreter: run failed with error:', e);
+      if (e instanceof RuntimeError) {
+        this.cb.print(e.message);
+      } else if (e === BREAK_SIGNAL || e === CONTINUE_SIGNAL || e instanceof ReturnSignal) {
+        // This should be caught lower down, but as a safeguard:
+        this.cb.print(new RuntimeError("Illegal control flow statement").message);
+      } else {
+        this.cb.print(new RuntimeError("An unknown error occurred").message);
+      }
+    }
   }
 
   // ── Block ─────────────────────────────────────────────────────────────────
 
   private execBlock(block: Block, env: Environment): void {
+    console.log('Interpreter: executing block:', block);
     for (const stmt of block.body) {
       this.execStatement(stmt, env);
     }
@@ -125,6 +149,7 @@ export class Interpreter {
   // ── Statement dispatch ───────────────────────────────────────────────────
 
   private execStatement(stmt: Statement, env: Environment): void {
+    console.log('Interpreter: executing statement:', stmt);
     switch (stmt.type) {
       case 'VariableDeclaration':  return this.execVarDecl(stmt, env);
       case 'PrintStatement':       return this.execPrint(stmt, env);
@@ -133,8 +158,8 @@ export class Interpreter {
       case 'ForStatement':         return this.execFor(stmt, env);
       case 'FunctionDeclaration':  return this.execFuncDecl(stmt, env);
       case 'ReturnStatement':      return this.execReturn(stmt, env);
-      case 'BreakStatement':       throw BREAK_SIGNAL;
-      case 'ContinueStatement':    throw CONTINUE_SIGNAL;
+      case 'BreakStatement':       console.log('Interpreter: throwing BREAK signal'); throw BREAK_SIGNAL;
+      case 'ContinueStatement':    console.log('Interpreter: throwing CONTINUE signal'); throw CONTINUE_SIGNAL;
       case 'IncrementStatement':   return this.execIncr(stmt, env);
       case 'DecrementStatement':   return this.execDecr(stmt, env);
       case 'ExpressionStatement':  this.evalExpr(stmt.expression, env); return;

@@ -37,22 +37,28 @@ export class ParseError extends Error {
 export class Parser {
   private pos = 0;
 
-  constructor(private readonly tokens: Token[]) {}
+  constructor(private readonly tokens: Token[]) {
+    console.log('Parser: initialized with tokens:', tokens);
+  }
 
   // ── Entry point ───────────────────────────────────────────────────────────
 
   parse(): Program {
+    console.log('Parser: starting parse');
     const body: Statement[] = [];
     while (!this.check(TT.EOF)) {
       body.push(this.parseStatement());
     }
-    return { type: 'Program', body };
+    const program: Program = { type: 'Program', body };
+    console.log('Parser: parse complete, AST:', program);
+    return program;
   }
 
   // ── Statements ────────────────────────────────────────────────────────────
 
   private parseStatement(): Statement {
     const tok = this.current();
+    console.log('Parser: parsing statement at token:', tok);
 
     if (tok.type === TT.MAAN_LE)       return this.parseVarDecl();
     if (tok.type === TT.SUN_RE)        return this.parsePrint();
@@ -66,7 +72,9 @@ export class Parser {
     if (tok.type === TT.BADHA_RE)      return this.parseIncr();
     if (tok.type === TT.GHATA_RE)      return this.parseDecr();
 
-    return this.parseExprStatement();
+    const exprStmt = this.parseExprStatement();
+    console.log('Parser: parsed expression statement:', exprStmt);
+    return exprStmt;
   }
 
   // maan le name = expr;

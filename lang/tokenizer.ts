@@ -55,11 +55,14 @@ export class Tokenizer {
   private line = 1;
   private col  = 1;
 
-  constructor(private readonly src: string) {}
+  constructor(private readonly src: string) {
+    console.log('Tokenizer: initialized with source:', src);
+  }
 
   // ── Public entry point ────────────────────────────────────────────────────
 
   tokenize(): Token[] {
+    console.log('Tokenizer: starting tokenization');
     const tokens: Token[] = [];
 
     while (!this.atEnd()) {
@@ -67,10 +70,16 @@ export class Tokenizer {
       if (this.atEnd()) break;
 
       const tok = this.nextToken();
-      if (tok) tokens.push(tok);
+      if (tok) {
+        console.log('Tokenizer: found token:', tok);
+        tokens.push(tok);
+      }
     }
 
-    tokens.push(this.makeToken(TT.EOF, '', this.line, this.col));
+    const eofToken = this.makeToken(TT.EOF, '', this.line, this.col);
+    console.log('Tokenizer: found token:', eofToken);
+    tokens.push(eofToken);
+    console.log('Tokenizer: tokenization complete, tokens:', tokens);
     return tokens;
   }
 

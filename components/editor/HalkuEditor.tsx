@@ -65,11 +65,14 @@ export default function HalkuEditor() {
   const viewRef = useRef<EditorView | null>(null);
   const { code, setCode } = useEditorStore();
 
+  console.log('HalkuEditor: initial code', code);
+
   // 🎹 Typing sound — attaches to the editor container
   useTypingSound(containerRef);
 
   useEffect(() => {
     if (!containerRef.current) return;
+    console.log('HalkuEditor: useEffect setup');
 
     const startState = EditorState.create({
       doc: code,
@@ -80,7 +83,9 @@ export default function HalkuEditor() {
         halkuTheme,
         EditorView.updateListener.of((update) => {
           if (update.docChanged) {
-            setCode(update.state.doc.toString());
+            const newCode = update.state.doc.toString();
+            console.log('HalkuEditor: code changed', newCode);
+            setCode(newCode);
           }
         }),
         EditorView.lineWrapping,
@@ -95,6 +100,7 @@ export default function HalkuEditor() {
     viewRef.current = view;
 
     return () => {
+      console.log('HalkuEditor: useEffect cleanup');
       view.destroy();
       viewRef.current = null;
     };

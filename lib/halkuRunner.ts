@@ -97,87 +97,119 @@ export function halkuRun(
   code: string,
   onLine: (line: OutputLine) => void
 ): Promise<RunResult> {
+  console.log('halkuRun: starting execution for code:', code);
   return new Promise((resolve) => {
-    // Create Blob worker
-    const blob = new Blob([WORKER_SOURCE], { type: "application/javascript" });
-    const blobUrl = URL.createObjectURL(blob);
-    const worker = new Worker(blobUrl);
-
-    const accumulatedLines: OutputLine[] = [];
+    const runId = nextId();
+    const startTime = Date.now();
+    const lines: OutputLine[] = [];
     let hasError = false;
-    const startTs = performance.now();
-    let settled = false;
 
-    // ── Finish helper (called exactly once) ──────────────────────────────────
-    const finish = () => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timeoutId);
-      worker.terminate();
-      URL.revokeObjectURL(blobUrl);
-      resolve({
-        lines: accumulatedLines,
-        hasError,
-        durationMs: performance.now() - startTs,
-      });
-    };
+    let worker: Worker | null = null;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-    // ── Timeout — kills infinite loops ───────────────────────────────────────
-    const timeoutId = setTimeout(() => {
-      const line: OutputLine = {
-        id: nextId(),
-        type: "error",
-        text: `⏱ Execution timed out after ${EXECUTION_TIMEOUT_MS / 1000}s — possible infinite loop`,
-        timestamp: Date.now(),
-      };
-      accumulatedLines.push(line);
-      onLine(line);
-      hasError = true;
-      finish();
-    }, EXECUTION_TIMEOUT_MS);
-
-    // ── Incoming messages from worker ────────────────────────────────────────
-    worker.onmessage = (e: MessageEvent) => {
-      const msg = e.data as {
-        kind: string;
-        type?: OutputType;
-        text?: string;
-        timestamp?: number;
-      };
-
-      if (msg.kind === "__done__") {
-        finish();
-        return;
+    function cleanup() {
+      console.log('halkuRun: cleanup for runId', runId);
+      if (timeoutId) clearTimeout(timeoutId);
+      if (worker) {
+        worker.terminate();
+        worker = null;
       }
+    }
 
-      if (msg.kind === "line" && msg.type && msg.text !== undefined) {
-        const line: OutputLine = {
+    try {
+      const blob = new Blob([WORKER_SOURCE], { type: "application/javascript" });
+      const blobUrl = URL.createObjectURL(blob);
+      worker = new Worker(blobUrl);
+      URL.revokeObjectURL(blobUrl); // Revoke immediately
+
+      worker.onmessage = (e) => {
+        console.log('halkuRun: message from worker', e.data);
+        if (e.data.kind === "__done__") {
+          cleanup();
+          resolve({
+            id: runId,
+            ok: !hasError,
+            elapsed: Date.now() - startTime,
+            lines,
+            hasError,
+            durationMs: Date.now() - startTime,
+          });
+          return;
+        }
+
+        if (e.data.kind === "line") {
+          const line: OutputLine = e.data;
+          if (line.type === "error") hasError = true;
+          lines.push(line);
+          onLine(line);
+        }
+      };
+
+      worker.onerror = (e) => {
+        console.error('halkuRun: worker error', e);
+        cleanup();
+        const errorLine: OutputLine = {
+          type: "error",
+          text: `Halku runtime error: ${e.message}`,
+          timestamp: Date.now(),
           id: nextId(),
-          type: msg.type,
-          text: msg.text,
-          timestamp: msg.timestamp ?? Date.now(),
         };
-        if (line.type === "error") hasError = true;
-        accumulatedLines.push(line);
-        onLine(line);
-      }
-    };
-
-    // ── Worker-level uncaught error ───────────────────────────────────────────
-    worker.onerror = (err: ErrorEvent) => {
-      const line: OutputLine = {
-        id: nextId(),
-        type: "error",
-        text: `Worker error: ${err.message ?? "unknown"}`,
-        timestamp: Date.now(),
+        lines.push(errorLine);
+        onLine(errorLine);
+        resolve({
+          id: runId,
+          ok: false,
+          elapsed: Date.now() - startTime,
+          lines,
+          hasError: true,
+          durationMs: Date.now() - startTime,
+        });
       };
-      accumulatedLines.push(line);
-      onLine(line);
-      hasError = true;
-      finish();
-    };
 
-    // ── Send the compiled code to the worker ──────────────────────────────────
-    worker.postMessage({ code });
+      // Timeout guard
+      timeoutId = setTimeout(() => {
+        console.warn('halkuRun: execution timed out for runId', runId);
+        cleanup();
+        const timeoutLine: OutputLine = {
+          type: "error",
+          text: `Execution timed out after ${EXECUTION_TIMEOUT_MS / 1000}s`,
+          timestamp: Date.now(),
+          id: nextId(),
+        };
+        lines.push(timeoutLine);
+        onLine(timeoutLine);
+        resolve({
+          id: runId,
+          ok: false,
+          elapsed: Date.now() - startTime,
+          lines,
+          hasError: true,
+          durationMs: Date.now() - startTime,
+        });
+      }, EXECUTION_TIMEOUT_MS);
+
+      console.log('halkuRun: posting code to worker for runId', runId);
+      worker.postMessage({ code });
+    } catch (err) {
+      console.error('halkuRun: error setting up worker', err);
+      cleanup();
+      const setupErrorLine: OutputLine = {
+        type: "error",
+        text:
+          "Halku runner failed to initialize. This may be a browser compatibility issue.",
+        timestamp: Date.now(),
+        id: nextId(),
+      };
+      lines.push(setupErrorLine);
+      onLine(setupErrorLine);
+      resolve({
+        id: runId,
+        ok: false,
+        elapsed: Date.now() - startTime,
+        lines,
+        hasError: true,
+        durationMs: Date.now() - startTime,
+      });
+    }
   });
 }

@@ -179,7 +179,7 @@ export default function HalkuMascot() {
                 justifyContent: "center",
               }}
             >
-              <HulkAvatar state={state} size={76} />
+              <HulkAvatar />
             </motion.div>
           </AnimatePresence>
 
