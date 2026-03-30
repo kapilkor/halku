@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     // No remote patterns needed — all images are local
     localPatterns: [
       { pathname: "/mascot-*.png" },
+      { pathname: "/logo/**" },
     ],
   },
 
