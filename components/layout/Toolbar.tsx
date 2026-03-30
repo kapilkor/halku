@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import SoundToggle from "@/components/ui/SoundToggle";
 
 interface ToolbarProps {
@@ -100,22 +101,23 @@ export default function Toolbar({
     >
       {/* ── Brand ── */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
-        <span
-          style={{
-            width:          28,
-            height:         28,
-            borderRadius:   "8px",
-            background:     "linear-gradient(135deg, #15803d 0%, #22c55e 50%, #7c3aed 100%)",
-            display:        "flex",
-            alignItems:     "center",
-            justifyContent: "center",
-            fontSize:       14,
-            boxShadow:      "0 0 12px rgba(34,197,94,0.5)",
-          }}
-          aria-hidden
-        >
-          💪
-        </span>
+        <Image
+style={{
+width: 36,
+height: 36,
+borderRadius: "8px",
+
+display: "flex",
+alignItems: "center",
+justifyContent: "center",
+fontSize: 14,
+boxShadow: "0 0 12px rgba(34,197,94,0.5)",
+}}
+src="/logo/9LFzw.png"
+alt="Halku Logo"
+width={36}
+height={36}
+/>
         <span
           style={{
             fontWeight:    700,
