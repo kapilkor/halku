@@ -7,5 +7,7 @@ export const metadata: Metadata = {
 };
 
 export default function PlaygroundPage() {
-  return <PlaygroundLayout />;
+  return (
+    <PlaygroundLayout />
+  );
 }

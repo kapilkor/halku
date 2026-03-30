@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface DocsModalProps {
@@ -8,6 +9,8 @@ interface DocsModalProps {
 }
 
 export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
+  const [isDesi, setIsDesi] = useState(false);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -58,8 +61,41 @@ export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
               }}
             >
               <h2 style={{ margin: 0, fontSize: "18px", color: "var(--text-primary)" }}>
-                📖 HalkuLang Documentation
+                📖 HalkuLang Docs
               </h2>
+              
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <span style={{ fontSize: "12px", color: !isDesi ? "var(--text-primary)" : "var(--text-muted)", fontWeight: !isDesi ? "bold" : "normal" }}>English</span>
+                <button
+                  onClick={() => setIsDesi(!isDesi)}
+                  style={{
+                    width: "40px",
+                    height: "22px",
+                    borderRadius: "11px",
+                    background: isDesi ? "var(--border-strong)" : "var(--border-subtle)",
+                    position: "relative",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "background 0.3s"
+                  }}
+                >
+                  <motion.div
+                    layout
+                    initial={false}
+                    animate={{ x: isDesi ? 18 : 2 }}
+                    style={{
+                      width: "18px",
+                      height: "18px",
+                      borderRadius: "50%",
+                      background: "white",
+                      position: "absolute",
+                      top: "2px"
+                    }}
+                  />
+                </button>
+                <span style={{ fontSize: "12px", color: isDesi ? "var(--text-primary)" : "var(--text-muted)", fontWeight: isDesi ? "bold" : "normal" }}>Desi Vibe</span>
+              </div>
+
               <button
                 onClick={onClose}
                 style={{
@@ -76,178 +112,132 @@ export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
             </div>
 
             <div style={{ padding: "20px", color: "var(--text-secondary)", lineHeight: 1.6, fontSize: "14px" }}>
-              <p>
-                <strong>HalkuLang</strong> is a dynamically typed toy programming language written in TypeScript.
-                It is designed to feel natural, conversational, and easy to learn using Hindi-English hybrid keywords.
-              </p>
-              
-              <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>General</h3>
-              <p>Every HalkuLang program starts with <strong>halku re</strong> and must end with <strong>bye halku</strong>. Anything outside of this block will be ignored.</p>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`This will be ignored
+              {!isDesi ? (
+                <>
+                  <p>
+                    <strong>HalkuLang</strong> is a fun, beginner-friendly scripting language that mixes Hindi keywords with English-style syntax. It feels natural for Hindi-speaking developers while keeping the logic simple and JavaScript-like.
+                  </p>
+                  <p><strong>Core Philosophy:</strong> Code should feel like speaking &mdash; mix <code>maan le</code>, <code>sun re</code>, <code>bhai agar</code> with normal expressions.</p>
 
-halku re
-  // Write your code here
-bye halku
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Variable Declaration</h3>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nmaan le variableName = value;\nbye halku`}</pre>
+                  <p><code>maan le</code> &rarr; declare a variable (like let in JavaScript)</p>
 
-This too will be ignored`}</pre>
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Output / Print</h3>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nsun re expression;\nbye halku`}</pre>
+                  <p><code>sun re</code> &rarr; print to console (like console.log)</p>
 
-              <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Variables</h3>
-              <p>Variables are declared using <strong>maan le</strong>.</p>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
-  maan le a = 10;
-  maan le b = "hello";
-  maan le c = 5;
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Data Types</h3>
+                  <ul style={{ paddingLeft: "20px", marginTop: 0 }}>
+                    <li><code>sach</code> &rarr; true</li>
+                    <li><code>jhoot</code> &rarr; false</li>
+                    <li><code>nalla</code> &rarr; null</li>
+                  </ul>
+                  <p><strong>Arithmetic & String Operations:</strong> You can freely use <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>+</code> for string concatenation, etc.</p>
 
-  a = a + 1;
-  b = "world";
-  c *= 2;
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>While Loop</h3>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\njab tak re (condition) {\n  // code\n}\nbye halku`}</pre>
+                  <p><code>jab tak re</code> &rarr; while</p>
 
-  sun re a;
-  sun re b;
-  sun re c;
-bye halku`}</pre>
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Increment</h3>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nbadha re variable;     // variable = variable + 1\nbye halku`}</pre>
 
-              <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Types</h3>
-              <p>HalkuLang supports numbers, strings, null, and booleans.</p>
-              <ul style={{ paddingLeft: "20px", marginTop: 0 }}>
-                <li><code>sach</code> → true</li>
-                <li><code>jhoot</code> → false</li>
-                <li><code>nalla</code> → null</li>
-              </ul>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
-  maan le a = 10;
-  maan le b = 20 + (5 * 2);
-  maan le c = "text";
-  maan le d = 'ok';
-  maan le e = nalla;
-  maan le f = sach;
-  maan le g = jhoot;
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Conditionals (if-else)</h3>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nbhai agar (condition) {\n  // code\n} nahi toh agar (condition) {\n  // code\n} nahi toh {\n  // else\n}\nbye halku`}</pre>
 
-  sun re a, b, c, d, e, f, g;
-bye halku`}</pre>
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Functions</h3>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nfunction functionName(parameters) {\n  // code\n  de re returnValue;     // return statement\n}\nbye halku`}</pre>
 
-              <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Output</h3>
-              <p>Use <strong>sun re</strong> to print values to the console.</p>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
-  sun re "Hello World";
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Example: Full Program</h3>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nmaan le naam = "Pranav";\nmaan le surname = "Kshirsagar";\nsun re naam + " " + surname;\n\nmaan le ginti = 0;\njab tak re (ginti < 3) {\n  sun re "Count = " + ginti;\n  badha re ginti;\n}\n\nfunction factorial(n) {\n  bhai agar (n <= 1) {\n    de re 1;\n  }\n  de re n * factorial(n - 1);\n}\n\nsun re "5! = " + factorial(5);\nbye halku`}</pre>
+                </>
+              ) : (
+                <>
+                  <p>
+                    <strong>Bhai, yeh raha HalkuLang ka full documentation, bilkul simple bhasha mein:</strong>
+                  </p>
 
-  maan le a = 10;
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Variable banana hai?</h3>
+                  <p>&rarr; <strong>maan le</strong> bol ke variable banao!</p>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nmaan le a = "Pranav";\nmaan le b = "kshirsagar";\nmaan le age = 22;\nmaan le sach_hai = sach;\nmaan le khali_hai = nalla;\nbye halku`}</pre>
 
-  {
-    maan le b = 20;
-    sun re a + b;
-  }
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Kuch print karna hai?</h3>
+                  <p>&rarr; <strong>sun re</strong> bol do!</p>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nsun re "Hello World";\nsun re a + " " + b;\nsun re "Mera naam " + a + " hai";\nbye halku`}</pre>
 
-  sun re 5, "ok", nalla, sach, jhoot;
-bye halku`}</pre>
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Loop chalana hai?</h3>
+                  <p>&rarr; <strong>jab tak re</strong> use karo</p>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nmaan le count = 0;\njab tak re (count < 5) {\n  sun re "Halku count = " + count;\n  badha re count;\n}\nbye halku`}</pre>
 
-              <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Conditionals</h3>
-              <p>HalkuLang supports if-else-if ladder using:</p>
-              <ul style={{ paddingLeft: "20px", marginTop: 0 }}>
-                <li><code>bhai agar</code> → if</li>
-                <li><code>nahi toh agar</code> → else if</li>
-                <li><code>nahi toh</code> → else</li>
-              </ul>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
-  maan le a = 10;
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Condition lagana hai?</h3>
+                  <p>&rarr; <strong>bhai agar ... nahi toh agar ... nahi toh</strong></p>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nmaan le marks = 85;\n\nbhai agar (marks >= 90) {\n  sun re "Topper!";\n} nahi toh agar (marks >= 60) {\n  sun re "Pass ho gaya bhai";\n} nahi toh {\n  sun re "Better luck next time";\n}\nbye halku`}</pre>
 
-  bhai agar (a < 5) {
-    sun re "a is small";
-  } nahi toh agar (a < 15) {
-    sun re "a is medium";
-  } nahi toh {
-    sun re "a is large";
-  }
-bye halku`}</pre>
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Function banana hai?</h3>
+                  <p>&rarr; Normal function likho aur <strong>de re</strong> se return karo</p>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nfunction add(x, y) {\n  de re x + y;\n}\n\nfunction factorial(n) {\n  bhai agar (n <= 1) {\n    de re 1;\n  }\n  de re n * factorial(n - 1);\n}\n\nsun re "3 + 5 = " + add(3, 5);\nsun re "5 ka factorial = " + factorial(5);\nbye halku`}</pre>
 
-              <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Loops</h3>
-              <p>Use <strong>jab tak re</strong> for while loops.</p>
-              <ul style={{ paddingLeft: "20px", marginTop: 0 }}>
-                <li><code>bas kar re</code> → break</li>
-                <li><code>agla dekh re</code> → continue</li>
-              </ul>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
-  maan le i = 0;
-
-  jab tak re (i < 5) {
-
-    badha re i;
-
-    bhai agar (i == 3) {
-      agla dekh re;
-    }
-
-    bhai agar (i == 4) {
-      bas kar re;
-    }
-
-    sun re i;
-  }
-
-  sun re "done";
-bye halku`}</pre>
-
-              <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>For Loop</h3>
-              <p>Use <strong>iske liye</strong> for for-loops.</p>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
-  iske liye (maan le i = 0; i < 5; badha re i) {
-    sun re i;
-  }
-bye halku`}</pre>
-
-              <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Functions</h3>
-              <p>Functions are declared using <strong>function</strong> and return values using <strong>de re</strong>.</p>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
-  function add(a, b) {
-    de re a + b;
-  }
-
-  maan le result = add(2, 3);
-  sun re result;
-bye halku`}</pre>
-
-              <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Increment / Decrement</h3>
-              <ul style={{ paddingLeft: "20px", marginTop: 0 }}>
-                <li><code>badha re x</code> → increment</li>
-                <li><code>ghata re x</code> → decrement</li>
-              </ul>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
-  maan le x = 5;
-
-  badha re x;
-  sun re x;
-
-  ghata re x;
-  sun re x;
-bye halku`}</pre>
-
-              <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Notes</h3>
-              <ul style={{ paddingLeft: "20px", marginTop: 0 }}>
-                <li>HalkuLang is dynamically typed</li>
-                <li>Semicolons <code>;</code> are recommended</li>
-                <li>Code is block-scoped using <code>{`{ }`}</code></li>
-                <li>Keywords are designed to feel natural and conversational</li>
-              </ul>
-
-              <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Example Program</h3>
-              <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku re
-  sun re "Start";
-
-  maan le a = 3;
-  maan le b = 0;
-
-  jab tak re (b < 5) {
-    sun re b;
-
-    bhai agar (b == a) {
-      sun re "equal hai";
-    }
-
-    badha re b;
-  }
-
-  sun re "End";
-bye halku`}</pre>
+                  <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Special Keywords Summary:</h3>
+                  <table style={{ width: "100%", textAlign: "left", borderCollapse: "collapse", marginTop: "10px" }}>
+                    <thead>
+                      <tr style={{ borderBottom: "1px solid var(--border-strong)" }}>
+                        <th style={{ padding: "8px" }}>Halku Keyword</th>
+                        <th style={{ padding: "8px" }}>Matlab (English)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                        <td style={{ padding: "8px" }}><code>maan le</code></td>
+                        <td style={{ padding: "8px" }}>let / declare variable</td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                        <td style={{ padding: "8px" }}><code>sun re</code></td>
+                        <td style={{ padding: "8px" }}>console.log / print</td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                        <td style={{ padding: "8px" }}><code>sach</code></td>
+                        <td style={{ padding: "8px" }}>true</td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                        <td style={{ padding: "8px" }}><code>jhoot</code></td>
+                        <td style={{ padding: "8px" }}>false</td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                        <td style={{ padding: "8px" }}><code>nalla</code></td>
+                        <td style={{ padding: "8px" }}>null</td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                        <td style={{ padding: "8px" }}><code>jab tak re</code></td>
+                        <td style={{ padding: "8px" }}>while</td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                        <td style={{ padding: "8px" }}><code>badha re</code></td>
+                        <td style={{ padding: "8px" }}>variable++ (increment)</td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                        <td style={{ padding: "8px" }}><code>bhai agar</code></td>
+                        <td style={{ padding: "8px" }}>if</td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                        <td style={{ padding: "8px" }}><code>nahi toh agar</code></td>
+                        <td style={{ padding: "8px" }}>else if</td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                        <td style={{ padding: "8px" }}><code>nahi toh</code></td>
+                        <td style={{ padding: "8px" }}>else</td>
+                      </tr>
+                      <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                        <td style={{ padding: "8px" }}><code>de re</code></td>
+                        <td style={{ padding: "8px" }}>return</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+                  <p style={{ marginTop: "20px", fontWeight: "bold", textAlign: "center", color: "var(--text-primary)" }}>
+                    Ab tu apna code Halku style mein likh aur maza le bhai! 🚀
+                  </p>
+                </>
+              )}
             </div>
             
             <div
