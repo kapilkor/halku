@@ -246,7 +246,7 @@ export default function PlaygroundLayout() {
       style={{
         height:     "100svh",
         padding:    "16px",
-        background: "radial-gradient(circle at 20% 0%, rgba(234,40,69,0.14), transparent 46%), var(--bg-primary)",
+        background: "var(--bg-primary)",
       }}
     >
       <div
@@ -257,9 +257,9 @@ export default function PlaygroundLayout() {
           height:        "100%",
           overflow:      "hidden",
           borderRadius:  "18px",
-          border:        "1px solid rgba(234,40,69,0.2)",
-          boxShadow:     "0 0 0 1px rgba(34,197,94,0.12), 0 24px 80px rgba(0,0,0,0.55)",
-          background:    "linear-gradient(180deg, #090909 0%, #050505 100%)",
+          border:        "1px solid var(--border-subtle)",
+          boxShadow:     "0 0 0 1px rgba(255,255,255,0.03), 0 24px 80px rgba(0,0,0,0.45)",
+          background:    "var(--bg-primary)",
         }}
       >
       {/* Toolbar */}
@@ -284,7 +284,7 @@ export default function PlaygroundLayout() {
           flex: 1,
           minHeight: 0,
           gap: "1px",
-          background: "linear-gradient(90deg, rgba(234,40,69,0.26), rgba(34,197,94,0.22))",
+          background: "var(--border-subtle)",
           padding: isMobile ? "10px" : "12px",
         }}
       >
@@ -304,8 +304,7 @@ export default function PlaygroundLayout() {
                 background: "var(--bg-panel)",
                 overflow: "hidden",
                 borderRadius: "12px",
-                border: "1px solid rgba(34,197,94,0.2)",
-                boxShadow: "inset 0 0 0 1px rgba(34,197,94,0.06)",
+                border: "1px solid var(--border-subtle)",
                 minHeight: 0,
               }}
             >
@@ -389,7 +388,7 @@ export default function PlaygroundLayout() {
               animate={{ opacity: 1, x: 0 }}
               exit={isMobile ? { opacity: 0, x: 10 } : undefined}
               transition={{ duration: 0.22, ease: "easeOut" }}
-              style={{ minHeight: 0, overflow: "hidden", borderRadius: "12px", border: "1px solid rgba(234,40,69,0.22)", boxShadow: "inset 0 0 0 1px rgba(234,40,69,0.08)" }}
+              style={{ minHeight: 0, overflow: "hidden", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}
             >
               <OutputConsole
                 lines={output}
