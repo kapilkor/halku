@@ -338,7 +338,6 @@ height={36}
           #halku-sep-a,
           #halku-sep-b,
           #halku-share-btn,
-          #halku-docs-btn,
           #halku-clear-btn {
             display: none !important;
           }
