@@ -18,6 +18,7 @@ import type { MascotState } from "@/lib/mascotFSM";
 import DocsModal from "@/components/ui/DocsModal";
 import ShareModal from "@/components/ui/ShareModal";
 import GithubSupportModal from "@/components/ui/GithubSupportModal";
+import FirstVisitDocsModal from "@/components/ui/FirstVisitDocsModal";
 
 const ENGAGE_DISMISSED_KEY = "halku-github-engagement-dismissed";
 const ENGAGE_SEEN_KEY = "halku-github-engagement-seen";
@@ -87,6 +88,7 @@ export default function PlaygroundLayout() {
   const [isEngageDismissed, setIsEngageDismissed] = useState(false);
   const [isEngageSeen, setIsEngageSeen] = useState(false);
   const [isEngageOpen, setIsEngageOpen] = useState(false);
+  const [isFirstVisitDocsOpen, setIsFirstVisitDocsOpen] = useState(false);
 
   const showToast = useCallback(
     (message: string, type: ToastState["type"] = "success") =>
@@ -133,6 +135,11 @@ export default function PlaygroundLayout() {
     const seen = localStorage.getItem(ENGAGE_SEEN_KEY) === "1";
     setIsEngageDismissed(dismissed);
     setIsEngageSeen(seen);
+  }, []);
+
+  // ── Docs guidance (show every playground open) ───────────────────────────
+  useEffect(() => {
+    setIsFirstVisitDocsOpen(true);
   }, []);
 
   // ── Mascot wiring ──────────────────────────────────────────────────────────
@@ -255,6 +262,16 @@ export default function PlaygroundLayout() {
     resetCode();
     playSound("click");
   }, [resetCode]);
+
+  const markDocsPopupSeen = useCallback(() => {
+    setIsFirstVisitDocsOpen(false);
+  }, []);
+
+  const handleFirstVisitReadDocs = useCallback(() => {
+    setIsFirstVisitDocsOpen(false);
+    setIsDocsOpen(true);
+    playSound("click");
+  }, []);
 
   const dismissEngagementForever = useCallback(() => {
     localStorage.setItem(ENGAGE_DISMISSED_KEY, "1");
@@ -454,6 +471,12 @@ export default function PlaygroundLayout() {
         onClose={() => setIsShareOpen(false)}
         url={shareUrl}
         onCopy={() => showToast("Link copied to clipboard! 🔗", "success")}
+      />
+
+      <FirstVisitDocsModal
+        isOpen={isFirstVisitDocsOpen}
+        onReadDocs={handleFirstVisitReadDocs}
+        onSkip={markDocsPopupSeen}
       />
 
       <GithubSupportModal

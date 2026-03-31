@@ -41,7 +41,7 @@ export default function Home() {
           boxShadow: "0 0 0 1px rgba(255,255,255,0.03), 0 24px 80px rgba(0,0,0,0.45)",
         }}
       >
-        <div style={{ position: "fixed", top: 0, right: 0, zIndex: 0, height: 900, width: "100%", opacity: 0.78 }}>
+        <div style={{ position: "fixed", top: 0, right: 0, zIndex: 0, height: 900, width: "100%", opacity: 0.78, pointerEvents: "none" }}>
           <Image
             src="/logo/kapil.png"
             alt="Halku Background"
@@ -106,8 +106,9 @@ export default function Home() {
               </span>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 24, color: "#a1a1aa", fontSize: 14, fontWeight: 600 }}>
-              <Link href="#features" style={{ color: "inherit", textDecoration: "none" }}>Features</Link>
+            
+
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
               <button
                 onClick={() => setIsDocsOpen(true)}
                 style={{
@@ -122,23 +123,50 @@ export default function Home() {
               >
                 Docs
               </button>
-            </div>
+              <a
+                href="https://github.com/kapilkor/halku"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  borderRadius: 999,
+                  border: "1px solid rgba(255,255,255,0.16)",
+                  background: "rgba(255,255,255,0.04)",
+                  padding: "8px 14px",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: "#f4f4f5",
+                  textDecoration: "none",
+                }}
+              >
+                <img
+                  src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                  alt=""
+                  aria-hidden
+                  width={16}
+                  height={16}
+                  style={{ display: "block", borderRadius: "50%" }}
+                />
+                GitHub
+              </a>
 
-            <Link
-              href="/playground"
-              style={{
-                flexShrink: 0,
-                borderRadius: 999,
-                background: "#fff",
-                padding: "8px 20px",
-                fontSize: 14,
-                fontWeight: 700,
-                color: "#111",
-                textDecoration: "none",
-              }}
-            >
-              Get Started
-            </Link>
+              <Link
+                href="/playground"
+                style={{
+                  borderRadius: 999,
+                  background: "#fff",
+                  padding: "8px 20px",
+                  fontSize: 14,
+                  fontWeight: 700,
+                  color: "#111",
+                  textDecoration: "none",
+                }}
+              >
+                Get Started
+              </Link>
+            </div>
           </div>
         </nav>
 
@@ -259,25 +287,48 @@ export default function Home() {
           </div>
         </section>
 
-        <footer style={{ marginTop: 40, borderTop: "1px solid rgba(255,255,255,0.08)", background: "#080808", padding: "48px 24px" }}>
+        <footer style={{ marginTop: 40, borderTop: "1px solid rgba(255,255,255,0.14)", background: "#000000", padding: "48px 24px" }}>
           <div
             style={{
               margin: "0 auto",
               maxWidth: 1280,
               display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "space-between",
+              flexDirection: "column",
+              justifyContent: "center",
               alignItems: "center",
-              gap: 16,
+              gap: 12,
+              textAlign: "center",
             }}
           >
-            <div style={{ fontSize: 14, color: "#71717a", fontWeight: 500 }}>
-              © {new Date().getFullYear()} HalkuLang Project.
+            <div style={{ display: "flex", gap: 20, fontSize: 14, color: "#f4f4f5" }}>
+              <a
+                href="https://github.com/kapilkor/halku"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                GitHub
+              </a>
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                Twitter
+              </a>
+              <a
+                href="https://github.com/kapilkor/halku/discussions"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                Community
+              </a>
             </div>
-            <div style={{ display: "flex", gap: 20, fontSize: 14, color: "#a1a1aa" }}>
-              <Link href="#" style={{ color: "inherit", textDecoration: "none" }}>GitHub</Link>
-              <Link href="#" style={{ color: "inherit", textDecoration: "none" }}>Twitter</Link>
-              <Link href="#" style={{ color: "inherit", textDecoration: "none" }}>Community</Link>
+
+            <div style={{ fontSize: 14, color: "#ffffff", fontWeight: 500 }}>
+              2026 HalkuLang Project
             </div>
           </div>
         </footer>

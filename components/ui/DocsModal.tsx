@@ -142,9 +142,39 @@ export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
                 📖 HalkuLang Docs
               </h2>
 
-              <button onClick={onClose} style={{ cursor: "pointer" }}>
-                ✕
-              </button>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <a
+                  href="https://github.com/kapilkor/halku"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    textDecoration: "none",
+                    color: "#fff",
+                    border: "1px solid rgba(255,255,255,0.18)",
+                    borderRadius: "8px",
+                    padding: "6px 10px",
+                    fontSize: "13px",
+                    fontWeight: 600,
+                  }}
+                >
+                  <img
+                    src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                    alt=""
+                    aria-hidden
+                    width={14}
+                    height={14}
+                    style={{ display: "block", borderRadius: "50%" }}
+                  />
+                  GitHub
+                </a>
+
+                <button onClick={onClose} style={{ cursor: "pointer" }}>
+                  ✕
+                </button>
+              </div>
             </div>
 
             {/* CONTENT */}
