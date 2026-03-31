@@ -17,6 +17,11 @@ import { HALKULANG_DEFAULT } from "@/lang/halkuLang";
 import type { MascotState } from "@/lib/mascotFSM";
 import DocsModal from "@/components/ui/DocsModal";
 import ShareModal from "@/components/ui/ShareModal";
+import GithubSupportModal from "@/components/ui/GithubSupportModal";
+
+const ENGAGE_DISMISSED_KEY = "halku-github-engagement-dismissed";
+const ENGAGE_SEEN_KEY = "halku-github-engagement-seen";
+const ENGAGE_RUN_ATTEMPTS_KEY = "halku-github-engagement-run-attempts";
 
 // ─── Sound mapping ────────────────────────────────────────────────────────────
 const STATE_SOUND: Partial<Record<MascotState, Parameters<typeof playSound>[0]>> = {
@@ -79,6 +84,9 @@ export default function PlaygroundLayout() {
   const [shareUrl, setShareUrl] = useState("");
   const [isMobile, setIsMobile] = useState(false);
   const [mobilePane, setMobilePane] = useState<MobilePane>("code");
+  const [isEngageDismissed, setIsEngageDismissed] = useState(false);
+  const [isEngageSeen, setIsEngageSeen] = useState(false);
+  const [isEngageOpen, setIsEngageOpen] = useState(false);
 
   const showToast = useCallback(
     (message: string, type: ToastState["type"] = "success") =>
@@ -117,6 +125,14 @@ export default function PlaygroundLayout() {
       showToast("Shared code loaded! ✨", "info");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── Hydrate engagement prompt flags ───────────────────────────────────────
+  useEffect(() => {
+    const dismissed = localStorage.getItem(ENGAGE_DISMISSED_KEY) === "1";
+    const seen = localStorage.getItem(ENGAGE_SEEN_KEY) === "1";
+    setIsEngageDismissed(dismissed);
+    setIsEngageSeen(seen);
   }, []);
 
   // ── Mascot wiring ──────────────────────────────────────────────────────────
@@ -179,35 +195,41 @@ export default function PlaygroundLayout() {
 
   useKonamiCode(fireKonami);
 
-  // ── Ctrl+Enter ─────────────────────────────────────────────────────────────
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-        e.preventDefault();
-        if (!isRunning) {
-          setMobilePane("output");
-          playSound("click");
-          runCode();
-        }
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [isRunning, runCode]);
-
   // ── Action handlers ────────────────────────────────────────────────────────
   const handleRun = useCallback(() => {
     if (!isRunning) {
+      const currentAttempts = parseInt(localStorage.getItem(ENGAGE_RUN_ATTEMPTS_KEY) ?? "0", 10);
+      const nextAttempts = (isNaN(currentAttempts) ? 0 : currentAttempts) + 1;
+      localStorage.setItem(ENGAGE_RUN_ATTEMPTS_KEY, String(nextAttempts));
+
+      if (nextAttempts >= 3 && !isEngageDismissed && !isEngageSeen) {
+        localStorage.setItem(ENGAGE_SEEN_KEY, "1");
+        setIsEngageSeen(true);
+        setIsEngageOpen(true);
+      }
+
       setMobilePane("output");
       playSound("click");
       runCode();
     }
-  }, [isRunning, runCode]);
+  }, [isEngageDismissed, isEngageSeen, isRunning, runCode]);
 
   const handleSelectPane = useCallback((pane: MobilePane) => {
     setMobilePane(pane);
     playSound("click");
   }, []);
+
+  // ── Ctrl+Enter ─────────────────────────────────────────────────────────────
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        handleRun();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [handleRun]);
 
   const handleShare = useCallback(() => {
     const result = encodeShareUrl(code);
@@ -233,6 +255,19 @@ export default function PlaygroundLayout() {
     resetCode();
     playSound("click");
   }, [resetCode]);
+
+  const dismissEngagementForever = useCallback(() => {
+    localStorage.setItem(ENGAGE_DISMISSED_KEY, "1");
+    localStorage.setItem(ENGAGE_SEEN_KEY, "1");
+    setIsEngageDismissed(true);
+    setIsEngageSeen(true);
+    setIsEngageOpen(false);
+  }, []);
+
+  const handleEngagementGithub = useCallback(() => {
+    dismissEngagementForever();
+    window.open("https://github.com/kapilkor/halku", "_blank", "noopener,noreferrer");
+  }, [dismissEngagementForever]);
 
   // Load HalkuLang example
   const handleTryHalkuLang = useCallback(() => {
@@ -419,6 +454,13 @@ export default function PlaygroundLayout() {
         onClose={() => setIsShareOpen(false)}
         url={shareUrl}
         onCopy={() => showToast("Link copied to clipboard! 🔗", "success")}
+      />
+
+      <GithubSupportModal
+        isOpen={isEngageOpen}
+        onClose={() => setIsEngageOpen(false)}
+        onDontShowAgain={dismissEngagementForever}
+        onGithub={handleEngagementGithub}
       />
 
       {/* Mascot */}
