@@ -13,7 +13,7 @@ interface ToolbarProps {
   isRunning?: boolean;
   isMobile?: boolean;
   activePane?: "code" | "output";
-  onTogglePane?: () => void;
+  onSelectPane?: (pane: "code" | "output") => void;
 }
 
 // ─── Small ghost button helper ────────────────────────────────────────────────
@@ -86,7 +86,7 @@ export default function Toolbar({
   isRunning,
   isMobile,
   activePane,
-  onTogglePane,
+  onSelectPane,
 }: ToolbarProps) {
   return (
     <motion.header
@@ -153,27 +153,63 @@ height={36}
 
       {/* ── Actions ── */}
       <div id="halku-toolbar-actions" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-        {/* Mobile view toggle */}
-        {isMobile && onTogglePane && (
-          <button
-            id="halku-view-toggle-btn"
-            onClick={onTogglePane}
-            title={activePane === "code" ? "Switch to output" : "Switch to code editor"}
+        {/* Mobile segmented view switcher */}
+        {isMobile && onSelectPane && (
+          <div
+            id="halku-view-segmented"
+            role="tablist"
+            aria-label="Switch editor panel"
             style={{
-              padding: "8px 12px",
-              borderRadius: "var(--radius-sm)",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "4px",
+              padding: "4px",
+              borderRadius: "12px",
               border: "1px solid var(--border-strong)",
               background: "rgba(255,255,255,0.03)",
-              color: "var(--text-primary)",
-              fontSize: "13px",
-              fontWeight: 700,
-              cursor: "pointer",
-              minHeight: "40px",
-              minWidth: "110px",
+              minHeight: "42px",
             }}
           >
-            {activePane === "code" ? "Output ↗" : "Code ↙"}
-          </button>
+            <button
+              id="halku-view-code-btn"
+              role="tab"
+              aria-selected={activePane === "code"}
+              onClick={() => onSelectPane("code")}
+              style={{
+                border: "none",
+                borderRadius: "9px",
+                minHeight: "34px",
+                cursor: "pointer",
+                fontSize: "13px",
+                fontWeight: 700,
+                background: activePane === "code" ? "linear-gradient(135deg, #166534 0%, #22c55e 100%)" : "transparent",
+                color: activePane === "code" ? "#ffffff" : "var(--text-muted)",
+                transition: "all 0.18s",
+              }}
+            >
+              Code
+            </button>
+
+            <button
+              id="halku-view-output-btn"
+              role="tab"
+              aria-selected={activePane === "output"}
+              onClick={() => onSelectPane("output")}
+              style={{
+                border: "none",
+                borderRadius: "9px",
+                minHeight: "34px",
+                cursor: "pointer",
+                fontSize: "13px",
+                fontWeight: 700,
+                background: activePane === "output" ? "linear-gradient(135deg, #166534 0%, #22c55e 100%)" : "transparent",
+                color: activePane === "output" ? "#ffffff" : "var(--text-muted)",
+                transition: "all 0.18s",
+              }}
+            >
+              Output
+            </button>
+          </div>
         )}
 
         {/* Sound toggle */}
@@ -291,6 +327,7 @@ height={36}
           }
 
           #halku-toolbar-actions > button,
+          #halku-view-segmented,
           #halku-toolbar-actions > div > button,
           #halku-run-btn {
             width: 100%;

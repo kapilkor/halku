@@ -204,8 +204,8 @@ export default function PlaygroundLayout() {
     }
   }, [isRunning, runCode]);
 
-  const handleTogglePane = useCallback(() => {
-    setMobilePane((prev) => (prev === "code" ? "output" : "code"));
+  const handleSelectPane = useCallback((pane: MobilePane) => {
+    setMobilePane(pane);
     playSound("click");
   }, []);
 
@@ -272,7 +272,7 @@ export default function PlaygroundLayout() {
         isRunning={isRunning}
         isMobile={isMobile}
         activePane={mobilePane}
-        onTogglePane={handleTogglePane}
+        onSelectPane={handleSelectPane}
       />
 
       {/* Editor + Console */}
