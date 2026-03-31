@@ -22,27 +22,28 @@ export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "rgba(0, 0, 0, 0.6)",
-            backdropFilter: "blur(4px)",
+            background: "rgba(8, 7, 7, 0.6)",
+            backdropFilter: "blur(6px)",
             padding: "20px",
           }}
           onClick={onClose}
         >
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 1, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            exit={{ opacity: 1, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: "var(--bg-panel)",
+              background: "#2a2a2a",
               border: "1px solid var(--border-strong)",
               borderRadius: "var(--radius-lg)",
               width: "100%",
               maxWidth: "600px",
               maxHeight: "80vh",
               overflowY: "auto",
-              boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
+              // boxShadow: "0 10px 40px rgba(210, 195, 195, 0.5)",
+              borderColor: "rgba(126, 91, 91, 0.1)",
               display: "flex",
               flexDirection: "column",
             }}
@@ -56,27 +57,36 @@ export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
                 justifyContent: "space-between",
                 position: "sticky",
                 top: 0,
-                background: "var(--bg-panel)",
-                zIndex: 10,
+                background: "rgba(20,20,20,0.9)", // FIX: solid/blur background
+                backdropFilter: "blur(10px)",     // optional but clean
+                zIndex: 1000,                     // FIX: keep it above content
               }}
             >
               <h2 style={{ margin: 0, fontSize: "18px", color: "var(--text-primary)" }}>
                 📖 HalkuLang Docs
               </h2>
-              
+
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <span style={{ fontSize: "12px", color: !isDesi ? "var(--text-primary)" : "var(--text-muted)", fontWeight: !isDesi ? "bold" : "normal" }}>English</span>
+                <span
+                  style={{
+                    fontSize: "12px",
+                    color: !isDesi ? "var(--text-primary)" : "var(--text-muted)",
+                    fontWeight: !isDesi ? "bold" : "normal",
+                  }}
+                >
+                  English
+                </span>
+
                 <button
                   onClick={() => setIsDesi(!isDesi)}
                   style={{
                     width: "40px",
                     height: "22px",
                     borderRadius: "11px",
-                    background: isDesi ? "var(--border-strong)" : "var(--border-subtle)",
+                    background: "red",
                     position: "relative",
                     border: "none",
                     cursor: "pointer",
-                    transition: "background 0.3s"
                   }}
                 >
                   <motion.div
@@ -89,11 +99,20 @@ export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
                       borderRadius: "50%",
                       background: "white",
                       position: "absolute",
-                      top: "2px"
+                      top: "2px",
                     }}
                   />
                 </button>
-                <span style={{ fontSize: "12px", color: isDesi ? "var(--text-primary)" : "var(--text-muted)", fontWeight: isDesi ? "bold" : "normal" }}>Desi Vibe</span>
+
+                <span
+                  style={{
+                    fontSize: "12px",
+                    color: isDesi ? "var(--text-primary)" : "var(--text-muted)",
+                    fontWeight: isDesi ? "bold" : "normal",
+                  }}
+                >
+                  Desi Vibe
+                </span>
               </div>
 
               <button
@@ -117,6 +136,9 @@ export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
                   <p>
                     <strong>HalkuLang</strong> is a fun, beginner-friendly scripting language that mixes Hindi keywords with English-style syntax. It feels natural for Hindi-speaking developers while keeping the logic simple and JavaScript-like.
                   </p>
+                  <h3 style={{ color: "var(--text-primary)", marginTop: 0, marginBottom: "8px" }}>
+                    Normal English Documentation
+                  </h3>
                   <p><strong>Core Philosophy:</strong> Code should feel like speaking &mdash; mix <code>maan le</code>, <code>sun re</code>, <code>bhai agar</code> with normal expressions.</p>
 
                   <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Variable Declaration</h3>
@@ -149,17 +171,20 @@ export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
                   <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nfunction functionName(parameters) {\n  // code\n  de re returnValue;     // return statement\n}\nbye halku`}</pre>
 
                   <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Example: Full Program</h3>
-                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nmaan le naam = "Pranav";\nmaan le surname = "Kshirsagar";\nsun re naam + " " + surname;\n\nmaan le ginti = 0;\njab tak re (ginti < 3) {\n  sun re "Count = " + ginti;\n  badha re ginti;\n}\n\nfunction factorial(n) {\n  bhai agar (n <= 1) {\n    de re 1;\n  }\n  de re n * factorial(n - 1);\n}\n\nsun re "5! = " + factorial(5);\nbye halku`}</pre>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nmaan le naam = "Olivia";\nmaan le surname = "Oggy";\nsun re naam + " " + surname;\n\nmaan le ginti = 0;\njab tak re (ginti < 3) {\n  sun re "Count = " + ginti;\n  badha re ginti;\n}\n\nfunction factorial(n) {\n  bhai agar (n <= 1) {\n    de re 1;\n  }\n  de re n * factorial(n - 1);\n}\n\nsun re "5! = " + factorial(5);\nbye halku`}</pre>
                 </>
               ) : (
                 <>
+                  <h3 style={{ color: "var(--text-primary)", marginTop: 0, marginBottom: "8px" }}>
+                    HalkuLang Style Documentation
+                  </h3>
                   <p>
                     <strong>Bhai, yeh raha HalkuLang ka full documentation, bilkul simple bhasha mein:</strong>
                   </p>
 
                   <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Variable banana hai?</h3>
                   <p>&rarr; <strong>maan le</strong> bol ke variable banao!</p>
-                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nmaan le a = "Pranav";\nmaan le b = "kshirsagar";\nmaan le age = 22;\nmaan le sach_hai = sach;\nmaan le khali_hai = nalla;\nbye halku`}</pre>
+                  <pre style={{ background: "var(--bg-secondary)", padding: "10px", borderRadius: "6px", border: "1px solid var(--border-subtle)", fontFamily: "var(--font-jb-mono)", whiteSpace: "pre-wrap" }}>{`halku\nmaan le a = "Olivia";\nmaan le b = "Oggy";\nmaan le age = 25;\nmaan le sach_hai = sach;\nmaan le khali_hai = nalla;\nbye halku`}</pre>
 
                   <h3 style={{ color: "var(--text-primary)", marginTop: "1.5rem", marginBottom: "8px", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "4px" }}>Kuch print karna hai?</h3>
                   <p>&rarr; <strong>sun re</strong> bol do!</p>
@@ -232,14 +257,14 @@ export default function DocsModal({ isOpen, onClose }: DocsModalProps) {
                       </tr>
                     </tbody>
                   </table>
-                  
+
                   <p style={{ marginTop: "20px", fontWeight: "bold", textAlign: "center", color: "var(--text-primary)" }}>
                     Ab tu apna code Halku style mein likh aur maza le bhai! 🚀
                   </p>
                 </>
               )}
             </div>
-            
+
             <div
               style={{
                 padding: "16px 20px",

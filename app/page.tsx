@@ -41,7 +41,7 @@ export default function Home() {
           boxShadow: "0 0 0 1px rgba(255,255,255,0.03), 0 24px 80px rgba(0,0,0,0.45)",
         }}
       >
-        <div style={{ position: "absolute", top: 0, right: 0, zIndex: 0, height: 900, width: "100%", opacity: 0.78 }}>
+        <div style={{ position: "fixed", top: 0, right: 0, zIndex: 0, height: 900, width: "100%", opacity: 0.78 }}>
           <Image
             src="/logo/kapil.png"
             alt="Halku Background"
@@ -106,12 +106,12 @@ export default function Home() {
               </span>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 24, color: "#a1a1aa", fontSize: 14, fontWeight: 600 }}>
+            {/* <div style={{ display: "flex", alignItems: "center", gap: 24, color: "#a1a1aa", fontSize: 14, fontWeight: 600 }}>
               <Link href="#features" style={{ color: "inherit", textDecoration: "none" }}>Features</Link>
               <button onClick={() => setIsDocsOpen(true)}>
                 Docs
               </button>
-            </div>
+            </div> */}
 
             <Link
               href="/playground"
