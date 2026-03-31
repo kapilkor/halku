@@ -7,45 +7,17 @@ import { isHalkuLang, runHalkuLang, applyCustomMapping } from "@/lang/halkuLang"
 
 export type DetectedLanguage = 'halku' | 'halkuLang';
 
-const DEFAULT_CODE = `// HalkuLang — Hindi-English hybrid scripting
+const DEFAULT_CODE = `// HalkuLang — simple start
 
-maan le a = "Pranav";
-maan le b = "kshirsagar";
 
-sun re a + " " + b;
+maan le name = "Halku";
+maan le i = 0;
 
-// Types: sach (true), jhoot (false), nalla (null)
-maan le sach_hai = sach;
-maan le nalla_hai = nalla;
-sun re sach_hai;
-sun re nalla_hai;
-
-// While loop: jab tak re (condition) { body }
-maan le ginti = 0;
-jab tak re (ginti < 3) {
-  sun re "Loop ginti = " + ginti;
-  badha re ginti;
+jab tak re (i < 10) {
+  sun re "Main " + name + " hun re!!";
+  badha re i;
 }
 
-// Conditionals: bhai agar () {} nahi toh agar () {} nahi toh {}
-maan le x = 10;
-bhai agar (x < 5) {
-  sun re "x is small";
-} nahi toh agar (x < 15) {
-  sun re "x is medium";
-} nahi toh {
-  sun re "x is large";
-}
-
-// Functions: function name(params) { de re value; }
-function factorial(n) {
-  bhai agar (n <= 1) {
-    de re 1;
-  }
-  de re n * factorial(n - 1);
-}
-
-sun re "5! = " + factorial(5);
 `;
 
 export interface EditorStore {
