@@ -246,6 +246,7 @@ export default function PlaygroundLayout() {
           minHeight:           0,
           gap:                 "1px",
           background:          "var(--border-subtle)",
+          padding:             "12px",
         }}
       >
         {/* Editor */}
@@ -260,6 +261,8 @@ export default function PlaygroundLayout() {
             flexDirection: "column",
             background:    "var(--bg-panel)",
             overflow:      "hidden",
+            borderRadius:  "12px",
+            border:        "1px solid var(--border-subtle)",
           }}
         >
           <div
@@ -341,7 +344,7 @@ export default function PlaygroundLayout() {
           initial={{ opacity: 0, x: 12 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          style={{ minHeight: 0, overflow: "hidden" }}
+          style={{ minHeight: 0, overflow: "hidden", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}
         >
           <OutputConsole
             lines={output}
