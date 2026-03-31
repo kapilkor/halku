@@ -106,12 +106,23 @@ export default function Home() {
               </span>
             </div>
 
-            {/* <div style={{ display: "flex", alignItems: "center", gap: 24, color: "#a1a1aa", fontSize: 14, fontWeight: 600 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 24, color: "#a1a1aa", fontSize: 14, fontWeight: 600 }}>
               <Link href="#features" style={{ color: "inherit", textDecoration: "none" }}>Features</Link>
-              <button onClick={() => setIsDocsOpen(true)}>
+              <button
+                onClick={() => setIsDocsOpen(true)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "inherit",
+                  cursor: "pointer",
+                  fontSize: "inherit",
+                  fontWeight: "inherit",
+                  padding: 0,
+                }}
+              >
                 Docs
               </button>
-            </div> */}
+            </div>
 
             <Link
               href="/playground"
