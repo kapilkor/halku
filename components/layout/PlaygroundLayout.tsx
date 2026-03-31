@@ -217,15 +217,25 @@ export default function PlaygroundLayout() {
 
   return (
     <div
-      id="halku-playground"
       style={{
-        display:       "flex",
-        flexDirection: "column",
-        height:        "100vh",
-        overflow:      "hidden",
-        background:    "var(--bg-primary)",
+        height:     "100svh",
+        padding:    "16px",
+        background: "var(--bg-primary)",
       }}
     >
+      <div
+        id="halku-playground"
+        style={{
+          display:       "flex",
+          flexDirection: "column",
+          height:        "100%",
+          overflow:      "hidden",
+          borderRadius:  "18px",
+          border:        "1px solid var(--border-subtle)",
+          boxShadow:     "0 0 0 1px rgba(255,255,255,0.03), 0 24px 80px rgba(0,0,0,0.45)",
+          background:    "var(--bg-primary)",
+        }}
+      >
       {/* Toolbar */}
       <Toolbar
         onRun={handleRun}
@@ -397,6 +407,7 @@ export default function PlaygroundLayout() {
           }
         }
       `}</style>
+      </div>
     </div>
   );
 }

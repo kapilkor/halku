@@ -108,18 +108,7 @@ export default function Home() {
 
             <div style={{ display: "flex", alignItems: "center", gap: 24, color: "#a1a1aa", fontSize: 14, fontWeight: 600 }}>
               <Link href="#features" style={{ color: "inherit", textDecoration: "none" }}>Features</Link>
-              <button
-                onClick={() => setIsDocsOpen(true)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "inherit",
-                  cursor: "pointer",
-                  fontSize: "inherit",
-                  fontWeight: "inherit",
-                  padding: 0,
-                }}
-              >
+              <button onClick={() => setIsDocsOpen(true)}>
                 Docs
               </button>
             </div>

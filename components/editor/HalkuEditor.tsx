@@ -14,13 +14,16 @@ const halkuTheme = EditorView.theme(
     "&": {
       backgroundColor: "transparent",
       height: "100%",
-      fontSize: "13px",
+      fontSize: "16px",
     },
     ".cm-content": {
       fontFamily:
         "var(--font-jb-mono), 'Fira Code', 'Cascadia Code', monospace",
-      padding: "16px 0",
+      padding: "24px 0",
+      lineHeight: "1.6",
       caretColor: "#22c55e",
+      maxWidth: "1100px",
+      margin: "0 auto",
     },
     ".cm-cursor": {
       borderLeftColor: "#22c55e",
@@ -51,6 +54,10 @@ const halkuTheme = EditorView.theme(
     },
     ".cm-lineNumbers": {
       minWidth: "40px",
+    },
+    ".cm-scroller": {
+      padding: "0 24px",
+      overflow: "auto",
     },
     "&.cm-focused": {
       outline: "none",

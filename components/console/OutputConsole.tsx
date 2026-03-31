@@ -71,8 +71,8 @@ export const ConsoleLine = memo(function ConsoleLine({
         background: s.bg,
         color: s.color,
         fontFamily: "var(--font-jb-mono), monospace",
-        fontSize: "12.5px",
-        lineHeight: 1.75,
+        fontSize: "14px",
+        lineHeight: 1.6,
         wordBreak: "break-all",
         whiteSpace: "pre-wrap",
       }}
@@ -83,7 +83,8 @@ export const ConsoleLine = memo(function ConsoleLine({
         title={`Logged at ${timeStr}`}
         style={{
           flexShrink: 0,
-          fontSize: "10px",
+          fontSize: "14px",
+          fontWeight: 500,
           color: "var(--text-muted)",
           marginTop: "3px",
           fontVariantNumeric: "tabular-nums",
@@ -98,9 +99,10 @@ export const ConsoleLine = memo(function ConsoleLine({
         aria-label={line.type}
         style={{
           flexShrink: 0,
-          fontSize: "9px",
+          fontSize: "11px",
           fontWeight: 700,
-          letterSpacing: "0.06em",
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
           padding: "2px 5px",
           borderRadius: "4px",
           border: `1px solid ${s.border}`,
@@ -161,11 +163,10 @@ export default function OutputConsole({
         style={{
           padding: "8px 14px",
           borderBottom: "1px solid var(--border-subtle)",
-          fontSize: "11px",
-          fontWeight: 600,
+          fontSize: "24px",
+          fontWeight: 700,
           color: "var(--text-muted)",
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
+          lineHeight: 1.2,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -196,13 +197,15 @@ export default function OutputConsole({
           {lines.length > 0 && (
             <span
               style={{
-                fontSize: "10px",
+                fontSize: "11px",
+                fontWeight: 700,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
                 padding: "1px 6px",
                 borderRadius: 99,
                 background: "var(--bg-elevated)",
                 border: "1px solid var(--border-subtle)",
                 color: "var(--text-muted)",
-                fontWeight: 500,
               }}
             >
               {lines.length}
@@ -215,7 +218,8 @@ export default function OutputConsole({
           {durationMs != null && !isRunning && (
             <span
               style={{
-                fontSize: "10px",
+                fontSize: "14px",
+                fontWeight: 500,
                 color: "var(--text-muted)",
                 fontFamily: "var(--font-jb-mono)",
               }}
@@ -231,7 +235,8 @@ export default function OutputConsole({
               onClick={onClear}
               title="Clear console output"
               style={{
-                fontSize: "10px",
+                fontSize: "16px",
+                fontWeight: 600,
                 color: "var(--text-muted)",
                 background: "transparent",
                 border: "1px solid transparent",
@@ -273,14 +278,18 @@ export default function OutputConsole({
               color: "var(--text-muted)",
               fontStyle: "italic",
               fontFamily: "var(--font-jb-mono)",
-              fontSize: "12.5px",
+              fontSize: "14px",
+              fontWeight: 500,
               padding: "8px 14px",
             }}
           >
             Press{" "}
             <kbd
               style={{
-                fontSize: "10px",
+                fontSize: "11px",
+                fontWeight: 700,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
                 padding: "1px 5px",
                 borderRadius: 4,
                 border: "1px solid var(--border-subtle)",
@@ -299,7 +308,8 @@ export default function OutputConsole({
             style={{
               color: "var(--yellow)",
               fontFamily: "var(--font-jb-mono)",
-              fontSize: "12.5px",
+              fontSize: "14px",
+              fontWeight: 500,
               padding: "8px 14px",
             }}
           >

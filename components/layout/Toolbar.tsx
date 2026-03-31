@@ -37,7 +37,8 @@ function GhostBtn({
         border: "1px solid var(--border-subtle)",
         background: "transparent",
         color: "var(--text-secondary)",
-        fontSize: "12px",
+        fontSize: "14px",
+        fontWeight: 600,
         cursor: "pointer",
         transition: "all 0.15s",
         whiteSpace: "nowrap",
@@ -113,7 +114,7 @@ justifyContent: "center",
 fontSize: 14,
 boxShadow: "0 0 12px rgba(34,197,94,0.5)",
 }}
-src="/logo/9LFzw.png"
+src="/logo/logo.png"
 alt="Halku Logo"
 width={36}
 height={36}
@@ -121,16 +122,18 @@ height={36}
         <span
           style={{
             fontWeight:    700,
-            fontSize:      "15px",
+            fontSize:      "24px",
             letterSpacing: "-0.01em",
             color:         "var(--text-primary)",
           }}
         >
-          Halku
+          
+          Halku 
         </span>
         <span
           style={{
-            fontSize:  "11px",
+            fontSize:  "24px",
+            fontWeight: 500,
             color:     "var(--text-muted)",
             padding:   "2px 8px",
             borderRadius: 99,
@@ -192,8 +195,8 @@ height={36}
               ? "rgba(22,163,74,0.4)"
               : "linear-gradient(135deg, #15803d 0%, #22c55e 100%)",
             color:         "#fff",
-            fontSize:      "13px",
-            fontWeight:    600,
+            fontSize:      "14px",
+            fontWeight:    700,
             cursor:        isRunning ? "not-allowed" : "pointer",
             boxShadow:     isRunning ? "none" : "0 0 16px rgba(34,197,94,0.45)",
             display:       "flex",
