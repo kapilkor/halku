@@ -38,7 +38,7 @@ function GhostBtn({
         padding: "5px 11px",
         borderRadius: "var(--radius-sm)",
         border: "1px solid var(--border-subtle)",
-        background: "transparent",
+        background: "rgba(0,0,0,0.2)",
         color: "var(--text-secondary)",
         fontSize: "14px",
         fontWeight: 600,
@@ -47,11 +47,13 @@ function GhostBtn({
         whiteSpace: "nowrap",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "var(--border-strong)";
+        e.currentTarget.style.borderColor = "rgba(234,40,69,0.65)";
+        e.currentTarget.style.background = "rgba(234,40,69,0.08)";
         e.currentTarget.style.color       = "var(--text-primary)";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.borderColor = "var(--border-subtle)";
+        e.currentTarget.style.background = "rgba(0,0,0,0.2)";
         e.currentTarget.style.color       = "var(--text-secondary)";
       }}
     >
@@ -101,8 +103,9 @@ export default function Toolbar({
         gap:             "12px",
         padding:         "0 14px",
         height:          "52px",
-        background:      "var(--bg-secondary)",
-        borderBottom:    "1px solid var(--border-subtle)",
+        background:      "linear-gradient(180deg, #140608 0%, #0b0b0b 72%)",
+        borderBottom:    "1px solid rgba(234,40,69,0.2)",
+        boxShadow:       "inset 0 -1px 0 rgba(34,197,94,0.12)",
         flexShrink:      0,
       }}
     >
@@ -118,7 +121,7 @@ display: "flex",
 alignItems: "center",
 justifyContent: "center",
 fontSize: 14,
-boxShadow: "0 0 12px rgba(34,197,94,0.5)",
+boxShadow: "0 0 10px rgba(234,40,69,0.35), 0 0 14px rgba(34,197,94,0.28)",
 }}
 src="/logo/logo.png"
 alt="Halku Logo"
@@ -140,10 +143,11 @@ height={36}
           style={{
             fontSize:  "24px",
             fontWeight: 500,
-            color:     "var(--text-muted)",
+            color:     "#f16c81",
             padding:   "2px 8px",
             borderRadius: 99,
-            border:    "1px solid var(--border-subtle)",
+            border:    "1px solid rgba(234,40,69,0.35)",
+            background: "rgba(234,40,69,0.08)",
             marginLeft: 2,
           }}
         >
@@ -165,8 +169,9 @@ height={36}
               gap: "4px",
               padding: "4px",
               borderRadius: "12px",
-              border: "1px solid var(--border-strong)",
-              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(234,40,69,0.35)",
+              background: "rgba(8,8,8,0.95)",
+              boxShadow: "inset 0 0 0 1px rgba(34,197,94,0.12)",
               minHeight: "42px",
             }}
           >
@@ -182,7 +187,7 @@ height={36}
                 cursor: "pointer",
                 fontSize: "13px",
                 fontWeight: 700,
-                background: activePane === "code" ? "linear-gradient(135deg, #166534 0%, #22c55e 100%)" : "transparent",
+                background: activePane === "code" ? "linear-gradient(135deg, #14532d 0%, #22c55e 100%)" : "transparent",
                 color: activePane === "code" ? "#ffffff" : "var(--text-muted)",
                 transition: "all 0.18s",
               }}
@@ -202,7 +207,7 @@ height={36}
                 cursor: "pointer",
                 fontSize: "13px",
                 fontWeight: 700,
-                background: activePane === "output" ? "linear-gradient(135deg, #166534 0%, #22c55e 100%)" : "transparent",
+                background: activePane === "output" ? "linear-gradient(135deg, #7a1023 0%, #ea2845 100%)" : "transparent",
                 color: activePane === "output" ? "#ffffff" : "var(--text-muted)",
                 transition: "all 0.18s",
               }}
@@ -257,15 +262,15 @@ height={36}
           style={{
             padding:       "6px 18px",
             borderRadius:  "var(--radius-sm)",
-            border:        "none",
+            border:        "1px solid rgba(34,197,94,0.25)",
             background:    isRunning
-              ? "rgba(22,163,74,0.4)"
+              ? "rgba(90,20,32,0.7)"
               : "linear-gradient(135deg, #15803d 0%, #22c55e 100%)",
             color:         "#fff",
             fontSize:      "14px",
             fontWeight:    700,
             cursor:        isRunning ? "not-allowed" : "pointer",
-            boxShadow:     isRunning ? "none" : "0 0 16px rgba(34,197,94,0.45)",
+            boxShadow:     isRunning ? "none" : "0 0 16px rgba(34,197,94,0.38), 0 0 10px rgba(234,40,69,0.24)",
             display:       "flex",
             alignItems:    "center",
             gap:           "7px",
