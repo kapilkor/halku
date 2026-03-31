@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import SoundToggle from "@/components/ui/SoundToggle";
 
 interface ToolbarProps {
@@ -88,6 +90,32 @@ export default function Toolbar({
   activePane,
   onSelectPane,
 }: ToolbarProps) {
+  const [isBrandMenuOpen, setIsBrandMenuOpen] = useState(false);
+  const brandMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onDocClick = (event: MouseEvent) => {
+      if (!brandMenuRef.current) return;
+      if (!brandMenuRef.current.contains(event.target as Node)) {
+        setIsBrandMenuOpen(false);
+      }
+    };
+
+    const onEsc = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsBrandMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("keydown", onEsc);
+
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("keydown", onEsc);
+    };
+  }, []);
+
   return (
     <motion.header
       id="halku-toolbar"
@@ -107,8 +135,30 @@ export default function Toolbar({
       }}
     >
       {/* ── Brand ── */}
-      <div id="halku-toolbar-brand" style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
-        <Image
+      <div
+        id="halku-toolbar-brand"
+        ref={brandMenuRef}
+        style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0, position: "relative" }}
+      >
+        <button
+          id="halku-brand-menu-btn"
+          onClick={() => setIsBrandMenuOpen((prev) => !prev)}
+          aria-haspopup="menu"
+          aria-expanded={isBrandMenuOpen}
+          title="Open navigation"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            background: "transparent",
+            border: "1px solid transparent",
+            borderRadius: "10px",
+            padding: "2px 6px",
+            cursor: "pointer",
+            color: "inherit",
+          }}
+        >
+          <Image
 style={{
 width: 36,
 height: 36,
@@ -125,30 +175,84 @@ alt="Halku Logo"
 width={36}
 height={36}
 />
-        <span
-          style={{
-            fontWeight:    700,
-            fontSize:      "24px",
-            letterSpacing: "-0.01em",
-            color:         "var(--text-primary)",
-          }}
-        >
-          
-          Halku 
-        </span>
-        <span
-          style={{
-            fontSize:  "24px",
-            fontWeight: 500,
-            color:     "#a3a3a3",
-            padding:   "2px 8px",
-            borderRadius: 99,
-            border:    "1px solid rgba(239,68,68,0.28)",
-            marginLeft: 2,
-          }}
-        >
-          playground
-        </span>
+          <span
+            style={{
+              fontWeight: 700,
+              fontSize: "24px",
+              letterSpacing: "-0.01em",
+              color: "var(--text-primary)",
+            }}
+          >
+            Halku
+          </span>
+          <span
+            style={{
+              fontSize: "24px",
+              fontWeight: 500,
+              color: "#a3a3a3",
+              padding: "2px 8px",
+              borderRadius: 99,
+              border: "1px solid rgba(239,68,68,0.28)",
+              marginLeft: 2,
+            }}
+          >
+            playground
+          </span>
+          <span
+            aria-hidden
+            style={{
+              fontSize: "12px",
+              color: "var(--text-muted)",
+              marginLeft: "2px",
+              transform: isBrandMenuOpen ? "rotate(180deg)" : "rotate(0deg)",
+              transition: "transform 0.18s",
+            }}
+          >
+            ▼
+          </span>
+        </button>
+
+        {isBrandMenuOpen && (
+          <div
+            id="halku-brand-menu"
+            role="menu"
+            aria-label="Brand navigation"
+            style={{
+              position: "absolute",
+              top: "46px",
+              left: 0,
+              minWidth: "210px",
+              borderRadius: "10px",
+              border: "1px solid var(--border-strong)",
+              background: "#121212",
+              boxShadow: "0 8px 28px rgba(0,0,0,0.35)",
+              padding: "6px",
+              zIndex: 20,
+            }}
+          >
+            <Link
+              href="/"
+              role="menuitem"
+              onClick={() => setIsBrandMenuOpen(false)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                textDecoration: "none",
+                color: "var(--text-primary)",
+                fontSize: "14px",
+                fontWeight: 600,
+                borderRadius: "8px",
+                padding: "9px 10px",
+                border: "1px solid transparent",
+                background: "transparent",
+              }}
+            >
+              {/* <span style={{ color: "#ef4444" }}>↩</span> */}
+              🛖HOME
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* ── Actions ── */}
