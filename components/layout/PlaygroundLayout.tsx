@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Toolbar from "@/components/layout/Toolbar";
 import OutputConsole from "@/components/console/OutputConsole";
@@ -56,6 +56,8 @@ interface ToastState {
   visible: boolean;
 }
 
+type MobilePane = "code" | "output";
+
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function PlaygroundLayout() {
   const {
@@ -75,6 +77,8 @@ export default function PlaygroundLayout() {
   const [isDocsOpen, setIsDocsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobilePane, setMobilePane] = useState<MobilePane>("code");
 
   const showToast = useCallback(
     (message: string, type: ToastState["type"] = "success") =>
@@ -88,6 +92,21 @@ export default function PlaygroundLayout() {
 
   // ── Init sound ─────────────────────────────────────────────────────────────
   useEffect(() => { initSound(); }, []);
+
+  // ── Track mobile breakpoint ────────────────────────────────────────────────
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 768px)");
+    const sync = () => setIsMobile(query.matches);
+    sync();
+
+    if (typeof query.addEventListener === "function") {
+      query.addEventListener("change", sync);
+      return () => query.removeEventListener("change", sync);
+    }
+
+    query.addListener(sync);
+    return () => query.removeListener(sync);
+  }, []);
 
   // ── Read share URL on first load ───────────────────────────────────────────
   useEffect(() => {
@@ -166,6 +185,7 @@ export default function PlaygroundLayout() {
       if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
         e.preventDefault();
         if (!isRunning) {
+          setMobilePane("output");
           playSound("click");
           runCode();
         }
@@ -178,10 +198,16 @@ export default function PlaygroundLayout() {
   // ── Action handlers ────────────────────────────────────────────────────────
   const handleRun = useCallback(() => {
     if (!isRunning) {
+      setMobilePane("output");
       playSound("click");
       runCode();
     }
   }, [isRunning, runCode]);
+
+  const handleTogglePane = useCallback(() => {
+    setMobilePane((prev) => (prev === "code" ? "output" : "code"));
+    playSound("click");
+  }, []);
 
   const handleShare = useCallback(() => {
     const result = encodeShareUrl(code);
@@ -244,126 +270,136 @@ export default function PlaygroundLayout() {
         onClear={handleClear}
         onShowDocs={() => setIsDocsOpen(true)}
         isRunning={isRunning}
+        isMobile={isMobile}
+        activePane={mobilePane}
+        onTogglePane={handleTogglePane}
       />
 
       {/* Editor + Console */}
       <div
         id="halku-split"
         style={{
-          display:             "grid",
-          gridTemplateColumns: "1fr 1fr",
-          flex:                1,
-          minHeight:           0,
-          gap:                 "1px",
-          background:          "var(--border-subtle)",
-          padding:             "12px",
+          display: "grid",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+          flex: 1,
+          minHeight: 0,
+          gap: "1px",
+          background: "var(--border-subtle)",
+          padding: isMobile ? "10px" : "12px",
         }}
       >
-        {/* Editor */}
-        <motion.section
-          id="halku-editor-panel"
-          initial={{ opacity: 0, x: -12 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          aria-label="Code editor"
-          style={{
-            display:       "flex",
-            flexDirection: "column",
-            background:    "var(--bg-panel)",
-            overflow:      "hidden",
-            borderRadius:  "12px",
-            border:        "1px solid var(--border-subtle)",
-          }}
-        >
-          <div
-            style={{
-              padding:       "8px 14px",
-              borderBottom:  "1px solid var(--border-subtle)",
-              fontSize:      "11px",
-              fontWeight:    600,
-              color:         "var(--text-muted)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              display:       "flex",
-              alignItems:    "center",
-              gap:           6,
-              flexShrink:    0,
-              userSelect:    "none",
-            }}
-          >
-            <span
+        <AnimatePresence initial={false} mode={isMobile ? "wait" : undefined}>
+          {(!isMobile || mobilePane === "code") && (
+            <motion.section
+              key="halku-editor-pane"
+              id="halku-editor-panel"
+              initial={{ opacity: 0, x: -12 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={isMobile ? { opacity: 0, x: -10 } : undefined}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              aria-label="Code editor"
               style={{
-                width:        8,
-                height:       8,
-                borderRadius: "50%",
-                background:   detectedLanguage === 'halkuLang' ? "#f59e0b" : "var(--accent-light)",
-                boxShadow:    detectedLanguage === 'halkuLang' ? "0 0 6px rgba(245,158,11,0.6)" : "0 0 6px var(--accent-glow)",
-                transition:   "background 0.3s, box-shadow 0.3s",
-              }}
-            />
-            {detectedLanguage === 'halkuLang' ? 'HalkuLang' : 'Halku'}
-            <span
-              style={{
-                fontSize:   "10px",
-                padding:    "1px 6px",
-                borderRadius: 99,
-                border:     `1px solid ${detectedLanguage === 'halkuLang' ? 'rgba(245,158,11,0.4)' : 'var(--border-subtle)'}`,
-                color:      detectedLanguage === 'halkuLang' ? "#f59e0b" : "var(--text-muted)",
-                fontWeight: 400,
-                fontFamily: "var(--font-jb-mono)",
-                transition: "all 0.3s",
+                display: "flex",
+                flexDirection: "column",
+                background: "var(--bg-panel)",
+                overflow: "hidden",
+                borderRadius: "12px",
+                border: "1px solid var(--border-subtle)",
+                minHeight: 0,
               }}
             >
-              {detectedLanguage === 'halkuLang' ? 'hindi-js' : '.hk'}
-            </span>
-
-            {/* Try HalkuLang shortcut */}
-            {detectedLanguage !== 'halkuLang' && (
-              <button
-                id="halku-try-halkuLang-btn"
-                onClick={handleTryHalkuLang}
-                title="Load HalkuLang example (Hindi-JS hybrid)"
+              <div
                 style={{
-                  marginLeft:    "auto",
-                  fontSize:      "10px",
-                  padding:       "2px 8px",
-                  borderRadius:  99,
-                  border:        "1px solid rgba(245,158,11,0.4)",
-                  background:    "rgba(245,158,11,0.08)",
-                  color:         "#f59e0b",
-                  cursor:        "pointer",
-                  fontWeight:    500,
-                  letterSpacing: "0.04em",
-                  whiteSpace:    "nowrap",
-                  textTransform: "none",
+                  padding: "8px 14px",
+                  borderBottom: "1px solid var(--border-subtle)",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  color: "var(--text-muted)",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  flexShrink: 0,
+                  userSelect: "none",
                 }}
               >
-                Try HalkuLang 🕉️
-              </button>
-            )}
+                <span
+                  style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    background: detectedLanguage === "halkuLang" ? "#f59e0b" : "var(--accent-light)",
+                    boxShadow: detectedLanguage === "halkuLang" ? "0 0 6px rgba(245,158,11,0.6)" : "0 0 6px var(--accent-glow)",
+                    transition: "background 0.3s, box-shadow 0.3s",
+                  }}
+                />
+                {detectedLanguage === "halkuLang" ? "HalkuLang" : "Halku"}
+                <span
+                  style={{
+                    fontSize: "10px",
+                    padding: "1px 6px",
+                    borderRadius: 99,
+                    border: `1px solid ${detectedLanguage === "halkuLang" ? "rgba(245,158,11,0.4)" : "var(--border-subtle)"}`,
+                    color: detectedLanguage === "halkuLang" ? "#f59e0b" : "var(--text-muted)",
+                    fontWeight: 400,
+                    fontFamily: "var(--font-jb-mono)",
+                    transition: "all 0.3s",
+                  }}
+                >
+                  {detectedLanguage === "halkuLang" ? "hindi-js" : ".hk"}
+                </span>
 
-          </div>
+                {detectedLanguage !== "halkuLang" && (
+                  <button
+                    id="halku-try-halkuLang-btn"
+                    onClick={handleTryHalkuLang}
+                    title="Load HalkuLang example (Hindi-JS hybrid)"
+                    style={{
+                      marginLeft: "auto",
+                      fontSize: "10px",
+                      padding: "2px 8px",
+                      borderRadius: 99,
+                      border: "1px solid rgba(245,158,11,0.4)",
+                      background: "rgba(245,158,11,0.08)",
+                      color: "#f59e0b",
+                      cursor: "pointer",
+                      fontWeight: 500,
+                      letterSpacing: "0.04em",
+                      whiteSpace: "nowrap",
+                      textTransform: "none",
+                    }}
+                  >
+                    Try HalkuLang 🕉️
+                  </button>
+                )}
+              </div>
 
-          <div style={{ flex: 1, minHeight: 0, overflow: "hidden" }}>
-            <HalkuEditor />
-          </div>
-        </motion.section>
+              <div style={{ flex: 1, minHeight: 0, overflow: "hidden" }}>
+                <HalkuEditor />
+              </div>
+            </motion.section>
+          )}
 
-        {/* Console */}
-        <motion.div
-          initial={{ opacity: 0, x: 12 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          style={{ minHeight: 0, overflow: "hidden", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}
-        >
-          <OutputConsole
-            lines={output}
-            isRunning={isRunning}
-            hasError={hasError}
-            durationMs={lastRunResult?.durationMs ?? null}
-            onClear={handleClear}
-          />
-        </motion.div>
+          {(!isMobile || mobilePane === "output") && (
+            <motion.div
+              key="halku-output-pane"
+              initial={{ opacity: 0, x: 12 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={isMobile ? { opacity: 0, x: 10 } : undefined}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              style={{ minHeight: 0, overflow: "hidden", borderRadius: "12px", border: "1px solid var(--border-subtle)" }}
+            >
+              <OutputConsole
+                lines={output}
+                isRunning={isRunning}
+                hasError={hasError}
+                durationMs={lastRunResult?.durationMs ?? null}
+                onClear={handleClear}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Toast */}
@@ -393,7 +429,9 @@ export default function PlaygroundLayout() {
         @media (max-width: 768px) {
           #halku-split {
             grid-template-columns: 1fr !important;
-            grid-template-rows: 50vh 1fr;
+          }
+          #halku-editor-panel {
+            min-height: 0;
           }
           #halku-mascot {
             bottom: 12px;

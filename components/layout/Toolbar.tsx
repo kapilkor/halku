@@ -11,6 +11,9 @@ interface ToolbarProps {
   onClear:   () => void;
   onShowDocs?: () => void;
   isRunning?: boolean;
+  isMobile?: boolean;
+  activePane?: "code" | "output";
+  onTogglePane?: () => void;
 }
 
 // ─── Small ghost button helper ────────────────────────────────────────────────
@@ -81,6 +84,9 @@ export default function Toolbar({
   onClear,
   onShowDocs,
   isRunning,
+  isMobile,
+  activePane,
+  onTogglePane,
 }: ToolbarProps) {
   return (
     <motion.header
@@ -101,7 +107,7 @@ export default function Toolbar({
       }}
     >
       {/* ── Brand ── */}
-      <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
+      <div id="halku-toolbar-brand" style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
         <Image
 style={{
 width: 36,
@@ -146,12 +152,37 @@ height={36}
       </div>
 
       {/* ── Actions ── */}
-      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+      <div id="halku-toolbar-actions" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+        {/* Mobile view toggle */}
+        {isMobile && onTogglePane && (
+          <button
+            id="halku-view-toggle-btn"
+            onClick={onTogglePane}
+            title={activePane === "code" ? "Switch to output" : "Switch to code editor"}
+            style={{
+              padding: "8px 12px",
+              borderRadius: "var(--radius-sm)",
+              border: "1px solid var(--border-strong)",
+              background: "rgba(255,255,255,0.03)",
+              color: "var(--text-primary)",
+              fontSize: "13px",
+              fontWeight: 700,
+              cursor: "pointer",
+              minHeight: "40px",
+              minWidth: "110px",
+            }}
+          >
+            {activePane === "code" ? "Output ↗" : "Code ↙"}
+          </button>
+        )}
+
         {/* Sound toggle */}
-        <SoundToggle />
+        <div id="halku-sound-wrap">
+          <SoundToggle />
+        </div>
 
         {/* Separator */}
-        <div style={{ width: 1, height: 20, background: "var(--border-subtle)", margin: "0 2px" }} />
+        <div id="halku-sep-a" style={{ width: 1, height: 20, background: "var(--border-subtle)", margin: "0 2px" }} />
 
         {/* Docs */}
         {onShowDocs && (
@@ -176,7 +207,7 @@ height={36}
         </GhostBtn>
 
         {/* Separator */}
-        <div style={{ width: 1, height: 20, background: "var(--border-subtle)", margin: "0 2px" }} />
+        <div id="halku-sep-b" style={{ width: 1, height: 20, background: "var(--border-subtle)", margin: "0 2px" }} />
 
         {/* Run */}
         <motion.button
@@ -205,6 +236,7 @@ height={36}
             transition:    "background 0.2s, box-shadow 0.2s",
             minWidth:      "82px",
             justifyContent:"center",
+            minHeight:     "40px",
           }}
         >
           {isRunning ? (
@@ -232,6 +264,55 @@ height={36}
           )}
         </motion.button>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          #halku-toolbar {
+            height: auto !important;
+            min-height: 108px;
+            padding: 10px 12px !important;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            gap: 10px;
+          }
+
+          #halku-toolbar-brand {
+            width: 100%;
+            justify-content: flex-start;
+          }
+
+          #halku-toolbar-actions {
+            width: 100%;
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            align-items: stretch;
+          }
+
+          #halku-toolbar-actions > button,
+          #halku-toolbar-actions > div > button,
+          #halku-run-btn {
+            width: 100%;
+            min-height: 42px !important;
+          }
+
+          #halku-sound-wrap,
+          #halku-sep-a,
+          #halku-sep-b,
+          #halku-share-btn,
+          #halku-docs-btn,
+          #halku-clear-btn {
+            display: none !important;
+          }
+
+          #halku-reset-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      `}</style>
     </motion.header>
   );
 }
